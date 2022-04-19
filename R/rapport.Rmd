@@ -1,0 +1,70 @@
+---
+title: "rapport"
+author: "Thierry"
+date: "4/19/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(readxl)
+
+```
+
+
+## Lecture des données
+
+```{r}
+
+here::here("data", "Ambatomainty")
+
+getwd()
+
+data <- read.csv("../data/Ambatomainty/Exported_Baseline_Ambatomainty.txt", sep = ";") %>% 
+  mutate(DATE = dmy(DATE))
+
+valueset <- read_excel("../data/disctionary_suivi.xlsx", 4)
+
+# remplacer les valeurs de la colonne choix par celles de correspondance dans data
+valueset_list <- valueset %>% 
+  split(valueset$variable)
+
+field_partners <- valueset_list[[1]][,c(3,4)] 
+names(field_partners) <- c("values", unique(valueset_list[[1]][1]))
+
+data_1 <- field_partners %>% 
+  right_join(data)
+  
+
+data_2 <- data_1 %>% 
+  mutate(FIELD_PARTNER_SINGLE_FCT = values) %>% 
+  select(-values)
+
+
+# Changer le nom de toutes les colonnes
+data_tidy_1 <- data_tidy %>% 
+  map(~set_names(.[["choix"]]), names(data_tidy))
+
+
+data_tidy_1 <- data_tidy %>% 
+  lapply(`names <-`, names(data_tidy))
+
+
+data_tidy %>% map(~names(.x))
+
+data_tidy %>% map(~names(.x[,4])) 
+names(data_tidy)
+
+
+data_tidy_2 <-  Map(function(x,y) setNames(x,y), data_tidy, names(data_tidy))
+
+
+```
+
+
