@@ -22,17 +22,13 @@ library(readxl)
 
 ```{r}
 
-here::here("data", "Ambatomainty")
-
-getwd()
-
 data <- read.csv("../data/Ambatomainty/Exported_Baseline_Ambatomainty.txt", sep = ";") %>% 
   mutate(DATE = dmy(DATE))
 
 valueset <- read_excel("../data/disctionary_suivi.xlsx", 4)
 
 # remplacer les valeurs de la colonne choix par celles de correspondance dans data
-valueset_list <- valueset %>% 
+valueset_list <- valueset %>% select(choix, correpondance) %>% 
   split(valueset$variable)
 
 field_partners <- valueset_list[[1]][,c(3,4)] 
@@ -48,21 +44,22 @@ data_2 <- data_1 %>%
 
 
 # Changer le nom de toutes les colonnes
-data_tidy_1 <- data_tidy %>% 
-  map(~set_names(.[["choix"]]), names(data_tidy))
+data_tidy_1 <- valueset_list %>% 
+  imap(function(x,y) x %>% rename_with(~paste(y), 1))
+
+data_tidy_2 <- valueset_list %>% 
+  imap(function(x,y) x %>% rename_with(~paste(y), 2))
 
 
-data_tidy_1 <- data_tidy %>% 
-  lapply(`names <-`, names(data_tidy))
+# Début de réponse
+data_merged <- data_tidy_1 %>% 
+  map(left_join, data, by = character())
 
+data_merged2 <- data_tidy_1 %>% 
+  lapply(merge, data)
 
-data_tidy %>% map(~names(.x))
-
-data_tidy %>% map(~names(.x[,4])) 
-names(data_tidy)
-
-
-data_tidy_2 <-  Map(function(x,y) setNames(x,y), data_tidy, names(data_tidy))
+data_merged3 <-  data %>% 
+  reduce(data_tidy_1, left_join)
 
 
 ```
