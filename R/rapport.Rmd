@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
 library(readxl)
+library(gt)
 
 ```
 
@@ -22,7 +23,7 @@ library(readxl)
 
 ```{r}
 
-data <- read.csv("../data/Ambatomainty/Exported_Baseline_Ambatomainty.txt", sep = ";") %>% 
+data <- read.csv("../data/Ambatomainty/Exported_Baseline_Ambatomainty.txt", sep = ";", strip.white = TRUE, na.strings = c("", NA)) %>% 
   mutate(DATE = dmy(DATE))
 
 valueset <- read_excel("../data/disctionary_suivi.xlsx", 4)
@@ -62,16 +63,92 @@ data_merged <- data_tidy_1 %>%
 #   reduce(data_tidy_1, left_join)
 
 # type de données
-str(data)
 
 data_roster <- data %>% 
   select(NUMERO_QUESTIONNAIRE, Q1_SOURCE_ECLAIRAGE_SINGLE_FCT_1:Q1_NOMBRE_JOURS_UTILISATION_PAR_NUM_5) %>% 
   pivot_longer(-NUMERO_QUESTIONNAIRE, 
                names_to =c(".value", "set"),
-               names_pattern = "(.+)_(.)")
+               names_pattern = "(.+)_(.)",
+               values_drop_na = TRUE) 
+
+names(data_qcm)
+
+# traitement QCM
+
+data_qcm <- data %>%
+  select(NUMERO_QUESTIONNAIRE, ends_with("_MULT_FCT"))
+
+# data_qcm <- data %>% 
+#   select(NUMERO_QUESTIONNAIRE, ends_with("_MULT_FCT")) %>% 
+#   transform(Q3_ENERGIE_DE_CUISSON_MULT_FCT = strsplit(Q3_ENERGIE_DE_CUISSON_MULT_FCT, ""),
+#         Q11_TYPE_D_ACTIVITE_MULT_FCT = strsplit(Q11_TYPE_D_ACTIVITE_MULT_FCT, ""),
+#         Q13_PROBLEME_DE_SANTE_MULT_FCT = strsplit(Q13_PROBLEME_DE_SANTE_MULT_FCT, ""),
+#         Q17_PARTICIPATION_FEMMES_ASSOC_MULT_FCT = strsplit(Q17_PARTICIPATION_FEMMES_ASSOC_MULT_FCT, "")) %>% 
+#   unnest(Q3_ENERGIE_DE_CUISSON_MULT_FCT, Q11_TYPE_D_ACTIVITE_MULT_FCT) %>%  
+#   unnest(Q13_PROBLEME_DE_SANTE_MULT_FCT) %>% 
+#   unnest(Q17_PARTICIPATION_FEMMES_ASSOC_MULT_FCT)
+
+
+data_qcmq3 <- data %>%
+  select(NUMERO_QUESTIONNAIRE, Q3_ENERGIE_DE_CUISSON_MULT_FCT) %>% 
+  mutate(Q3_ENERGIE_DE_CUISSON_MULT_FCT = strsplit(Q3_ENERGIE_DE_CUISSON_MULT_FCT, "")) %>%
+  unnest(Q3_ENERGIE_DE_CUISSON_MULT_FCT)
 
 
 
 ```
+
+
+## Variables sociodémographiques
+
+```{r}
+
+# sexe des enquêtés
+
+sexe <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, SEXE_SINGLE_FCT) %>%
+  mutate(SEXE_SINGLE_FCT = as.character(SEXE_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$SEXE_SINGLE_FCT) %>% 
+  mutate(SEXE_SINGLE_FCT = correpondance) %>% 
+  select(-correpondance)
+
+theme_set(theme_light())
+
+sexe %>% 
+  ggplot(aes(x = SEXE_SINGLE_FCT)) +
+  geom_bar(aes(y = ..count../sum(..count..)), fill = "lightblue") +
+  scale_y_continuous(labels=scales::percent) +
+  geom_text(aes( label = scales::percent(..count../sum(..count..)),
+                   y= ..count../sum(..count..) ), stat= "count", hjust = -.05) +
+  ggtitle("Sexe des enquêtés") +
+  coord_flip() +
+  labs(
+    x = NULL,
+    y = "Nombre"
+  )
+
+# age des enquêtés
+
+age <- data %>% 
+  select(AGE_NUM)
+
+age %>% 
+  summarise(moyenne = mean(AGE_NUM),
+            minimum = min(AGE_NUM),
+            maximum = max(AGE_NUM)) 
+
+# répartition des enqêtés par hameau
+table(data$NOM_DU_HAMEAU_CHR) 
+
+data %>% 
+  select(NOM_DU_HAMEAU_CHR) %>% 
+  group_by(NOM_DU_HAMEAU_CHR) %>% 
+  count %>% 
+  arrange(desc(n))
+
+
+
+```
+
 
 
