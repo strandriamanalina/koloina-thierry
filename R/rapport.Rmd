@@ -31,35 +31,45 @@ valueset <- read_excel("../data/disctionary_suivi.xlsx", 4)
 valueset_list <- valueset %>% select(choix, correpondance) %>% 
   split(valueset$variable)
 
-field_partners <- valueset_list[[1]][,c(3,4)] 
-names(field_partners) <- c("values", unique(valueset_list[[1]][1]))
+# field_partners <- valueset_list[[1]][,c(3,4)] 
+# names(field_partners) <- c("values", unique(valueset_list[[1]][1]))
 
-data_1 <- field_partners %>% 
-  right_join(data)
+# data_1 <- field_partners %>% 
+#   right_join(data)
   
 
-data_2 <- data_1 %>% 
-  mutate(FIELD_PARTNER_SINGLE_FCT = values) %>% 
-  select(-values)
+# data_2 <- data_1 %>% 
+#   mutate(FIELD_PARTNER_SINGLE_FCT = values) %>% 
+#   select(-values)
 
 
 # Changer le nom de toutes les colonnes
 data_tidy_1 <- valueset_list %>% 
   imap(function(x,y) x %>% rename_with(~paste(y), 1))
 
-data_tidy_2 <- valueset_list %>% 
-  imap(function(x,y) x %>% rename_with(~paste(y), 2))
+# data_tidy_2 <- valueset_list %>% 
+#   imap(function(x,y) x %>% rename_with(~paste(y), 2))
 
 
 # Début de réponse
 data_merged <- data_tidy_1 %>% 
   map(left_join, data, by = character())
 
-data_merged2 <- data_tidy_1 %>% 
-  lapply(merge, data)
+# data_merged2 <- data_tidy_1 %>% 
+#   lapply(merge, data)
+# 
+# data_merged3 <-  data %>% 
+#   reduce(data_tidy_1, left_join)
 
-data_merged3 <-  data %>% 
-  reduce(data_tidy_1, left_join)
+# type de données
+str(data)
+
+data_roster <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q1_SOURCE_ECLAIRAGE_SINGLE_FCT_1:Q1_NOMBRE_JOURS_UTILISATION_PAR_NUM_5) %>% 
+  pivot_longer(-NUMERO_QUESTIONNAIRE, 
+               names_to =c(".value", "set"),
+               names_pattern = "(.+)_(.)")
+
 
 
 ```
