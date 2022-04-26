@@ -14,12 +14,11 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
 library(readxl)
-library(gt)
+
 
 ```
 
 
-## Lecture des données
 
 ```{r}
 
@@ -71,8 +70,6 @@ data_roster <- data %>%
                names_pattern = "(.+)_(.)",
                values_drop_na = TRUE) 
 
-names(data_qcm)
-
 # traitement QCM
 
 data_qcm <- data %>%
@@ -97,6 +94,18 @@ data_qcmq3 <- data %>%
 
 
 ```
+
+
+## 
+
+```{r}
+
+
+
+```
+
+
+
 
 
 ## Variables sociodémographiques
@@ -145,7 +154,6 @@ data %>%
   group_by(NOM_DU_HAMEAU_CHR) %>% 
   count %>% 
   arrange(desc(n))
-
 
 
 ```
