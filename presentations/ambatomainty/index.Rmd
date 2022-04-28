@@ -85,13 +85,14 @@ data_qcmq3 <- data %>%
 ---
 ### Localisation
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=5}
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=5, fig.width=10}
 
 cart <- read_excel(here::here("data","data_villages.xlsx"))
 
 
 cartesolaire <- cart %>% 
-  dplyr::filter(`Année` == 2022)%>% 
+  filter(`Année` == 2022)%>% 
+  select(-`Année`, -Statut) %>% 
   mutate_if(is.numeric, funs(ifelse(is.na(.), 0, .))) %>% drop_na() 
 
 solaire <- as_tibble(cartesolaire)
