@@ -221,7 +221,7 @@ source_eclairage %>%
 
 ## Impact sur la santé
 
-```{r echo=FALSE}
+```{r echo=FALSE, message=FALSE, fig.height=4}
 
 
 ```
@@ -229,14 +229,14 @@ source_eclairage %>%
 ---
 ## Utilisation des technologies
 
-```{r}
+```{r echo=FALSE, message=FALSE, fig.height=4}
 
 
 ```
 
 ---
 ## Education
-```{r}
+```{r echo=FALSE, message=FALSE, fig.height=4}
 
 
 ```
