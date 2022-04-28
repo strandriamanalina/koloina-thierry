@@ -41,10 +41,10 @@ class: center, middle
 ### Village d'Ambakivao
 ```{r echo=FALSE}
 
-data <- read.csv("../data/Ambatomainty/Exported_Baseline_Ambatomainty.txt", sep = ";", strip.white = TRUE, na.strings = c("", NA)) %>% 
+data <- read.csv(here::here("data", "Ambatomainty", "Exported_Baseline_Ambatomainty.txt"), sep = ";", strip.white = TRUE, na.strings = c("", NA)) %>% 
   mutate(DATE = dmy(DATE))
 
-valueset <- read_excel("../data/disctionary_suivi.xlsx", 4)
+valueset <- read_excel(here::here("data", "disctionary_suivi.xlsx"), 4)
 
 # remplacer les valeurs de la colonne choix par celles de correspondance dans data
 valueset_list <- valueset %>% select(choix, correpondance) %>% 
