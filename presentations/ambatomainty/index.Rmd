@@ -14,7 +14,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-
+knitr::opts_chunk$set(fig.retina = 3)
 options(htmltools.dir.version = FALSE)
 
 ```
@@ -29,7 +29,9 @@ library(hms)
 library(hrbrthemes)
 library(viridis)
 library(kableExtra)
-
+library(mapview)
+library(sf)
+library(leaflet)
 ```
 
 
@@ -38,7 +40,8 @@ class: center, middle
 
 # Résumé exécutif
 
-### Village d'Ambakivao
+### Village d'Ambatomainty
+
 ```{r echo=FALSE}
 
 data <- read.csv(here::here("data", "Ambatomainty", "Exported_Baseline_Ambatomainty.txt"), sep = ";", strip.white = TRUE, na.strings = c("", NA)) %>% 
@@ -77,6 +80,35 @@ data_qcmq3 <- data %>%
   unnest(Q3_ENERGIE_DE_CUISSON_MULT_FCT)
 
 ```
+
+
+---
+### Localisation
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=5}
+
+cart <- read_excel(here::here("data","data_villages.xlsx"))
+
+
+cartesolaire <- cart %>% 
+  dplyr::filter(`Année` == 2022)%>% 
+  mutate_if(is.numeric, funs(ifelse(is.na(.), 0, .))) %>% drop_na() 
+
+solaire <- as_tibble(cartesolaire)
+femme <- st_as_sf(solaire, coords = c("Longitude", "Latitude"), crs = 4326) 
+cartefemme<- mapview(femme, 
+                     map.types = c("OpenStreetMap.DE"),
+                     zcol = c("Village"), 
+                     legend = FALSE
+)
+cartefemme
+
+
+
+
+
+```
+
 
 
 ---
