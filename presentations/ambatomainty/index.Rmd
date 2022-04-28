@@ -96,17 +96,21 @@ cartesolaire <- cart %>%
 
 solaire <- as_tibble(cartesolaire)
 femme <- st_as_sf(solaire, coords = c("Longitude", "Latitude"), crs = 4326) 
-cartefemme<- mapview(femme, 
+cartefemme<- mapview(femme,
                      map.types = c("OpenStreetMap.DE"),
-                     zcol = c("Village"), 
+                     zcol = c("Village"),
                      legend = FALSE
 )
 cartefemme
 
+# femme %>% 
+# leaflet() %>% 
+#   addTiles() %>% 
+#   setView(lng = 47.321488, lat = -19.394923 , zoom = 5) %>% 
+#   addCircles(popup = femme$Village)
 
 
-
-
+  
 ```
 
 
