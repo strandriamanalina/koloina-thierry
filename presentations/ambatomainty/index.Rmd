@@ -8,19 +8,29 @@ output:
   xaringan::moon_reader:
     lib_dir: libs
     nature:
+      slideNumberFormat: "%current%"
       highlightStyle: github
       highlightLines: true
-      countIncrementalSlides: false
+      ratio: 16:9
+      countIncrementalSlides: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.retina = 3)
+knitr::opts_chunk$set(fig.retina = 3, 
+                      cache = FALSE,
+                      echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.show = TRUE,
+                      hiline = TRUE
+)
 options(htmltools.dir.version = FALSE)
 
 ```
 
 
 ```{r include=FALSE}
+
 # load packages
 library(tidyverse)
 library(lubridate)
@@ -32,8 +42,10 @@ library(kableExtra)
 library(mapview)
 library(sf)
 library(leaflet)
+
 ```
 
+<!-- Intentionnellemet laissé en blanc -->
 
 ---
 class: center, middle
@@ -81,11 +93,13 @@ data_qcmq3 <- data %>%
 
 ```
 
+---
+### Résumé exécutif
 
 ---
 ### Localisation
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=5, fig.width=10}
+```{r echo=FALSE, fig.height=5, fig.width=10}
 
 cart <- read_excel(here::here("data","data_villages.xlsx"))
 
@@ -120,7 +134,7 @@ cartefemme
 
 ### Sources d'énergie pour l'éclairage
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=4}
+```{r echo=FALSE, fig.height=4}
 
 # Source d'éclairage
 
@@ -175,7 +189,7 @@ La `r which.min(source_eclairage_type) %>% names` est la source d'éclairage la 
 ---
 ### Nombre de source d'éclairage par ménage
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=4}
+```{r echo=FALSE, fig.height=4}
 
 nombre_source$nombre_source %>% table() %>% broom::tidy() %>%  
   rename(`Nombre d'éclairage utilisé` = ".", 
@@ -282,12 +296,12 @@ source_eclairage %>%
 ---
 class: center, middle
 
-# Résultas des enquêtes auprès des ménages
+# Résultats des enquêtes auprès des ménages
 
 ---
 ## Méthodologie et description de l'échantillon
 
-```{r echo=FALSE, fig.height=3, dev='svg', message = FALSE}
+```{r echo=FALSE, fig.height=3, message = FALSE}
 
 sexe <- data %>% 
   select(NUMERO_QUESTIONNAIRE, SEXE_SINGLE_FCT) %>%
