@@ -1,16 +1,27 @@
 ---
-title: "Village d'Ambatomainty"
-subtitle: "Rapport Baseline"
-author: 
-institute: "Barefoot College Madagascar"
-date: "Mai 2022 (updated: `r Sys.Date()`)"
+pagetitle: "Rapport d'étude"
+title: Village d'Ambatomainty
+subtitle: 
+    - "Rapport Baseline"
+author: Barefoot College Madagascar
+date: "Mai 2022"
+location: 
 output:
   xaringan::moon_reader:
     lib_dir: libs
+    css: 
+      - libs/css/a11y-light.css
+      - libs/css/xaringan-rstudio.css
+      - libs/css/title-slide.css
+      - libs/css/toronto-data-workshop.css
+    seal: false
+    anchor_sections: false
+    self_contained: false
     nature:
       slideNumberFormat: "%current%"
       highlightStyle: github
       highlightLines: true
+      highlightLanguage: [r, latex, yaml, markdown, javascript, html]
       ratio: 16:9
       countIncrementalSlides: true
 ---
@@ -45,9 +56,31 @@ library(leaflet)
 
 ```
 
-<!-- Intentionnellemet laissé en blanc -->
+name: title
+class: top hide-count center
+layout: true
+
+<!-- Title Slide -->
+.talk-title[
+# `r rmarkdown::metadata$title`
+]
+
+<div class="talk-band left">
+<div class="talk-author f-zilla">`r rmarkdown::metadata$author`</div>
+<div class="talk-twitter code"></div>
+</div>
+<div class="talk-band right">
+<div class="code">`r paste(rmarkdown::metadata$location, collapse = ", ")`</div>
+<div class="code">`r paste(rmarkdown::metadata$date, collapse = ", ")`</div>
+</div>
 
 ---
+
+## .pink.f-pompiere.absolute.w-100.left-0.animated.bounceInUp[Rapport Baseline]
+
+
+---
+layout: false
 class: center, middle
 
 # Résumé exécutif
@@ -56,8 +89,7 @@ class: center, middle
 
 ```{r echo=FALSE}
 
-data <- read.csv(here::here("data", "Ambatomainty", "Exported_Baseline_Ambatomainty.txt"), sep = ";", strip.white = TRUE, na.strings = c("", NA)) %>% 
-  mutate(DATE = dmy(DATE))
+data <- read.csv(here::here("data", "Ambatomainty", "Exported_Baseline_Ambatomainty.txt"), sep = ";", strip.white = TRUE, na.strings = c("", NA)) %>%   mutate(DATE = dmy(DATE))
 
 valueset <- read_excel(here::here("data", "disctionary_suivi.xlsx"), 4)
 
