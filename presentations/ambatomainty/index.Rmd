@@ -214,8 +214,8 @@ nombre_source <- source_eclairage %>%
 
 ```
 
-La `r which.max(source_eclairage_type) %>% names` est la source d'éclairage la plus utilisée par les ménages interviewés (`r scales::percent(max(source_eclairage_type)/sum(source_eclairage_type))`). 
-La `r which.min(source_eclairage_type) %>% names` est la source d'éclairage la moins utilisée par les ménages interviewés (`r scales::percent(min(source_eclairage_type)/sum(source_eclairage_type))`). 
+- La `r which.max(source_eclairage_type) %>% names` est la source d'éclairage la plus utilisée par les ménages interviewés (`r scales::percent(max(source_eclairage_type)/sum(source_eclairage_type))`). 
+- La `r which.min(source_eclairage_type) %>% names` est la source d'éclairage la moins utilisée par les ménages interviewés (`r scales::percent(min(source_eclairage_type)/sum(source_eclairage_type))`). 
 
 
 ---
@@ -239,7 +239,7 @@ nombre_source$nombre_source %>% table() %>% broom::tidy() %>%
 
 ```
 
-Parmi les ménages interviewés, 25% utilisent deux types de sources d'éclairage. La plupart utilisent en même temps des lampes à pétrole et des torches électrique.
+- Parmi les ménages interviewés, 25% utilisent deux types de sources d'éclairage. La plupart utilisent en même temps des lampes à pétrole et des torches électrique.
 
 ---
 
@@ -277,7 +277,7 @@ cout_type_table <- cout_type %>%
 
 ```
 
-La source d'éclairage qui coûte la plus chère aux ménages est la *`r cout_type_table[[1,1]]`* avec une dépense moyenne mensuelle de **`r cout_type_table[[1,2]] %>% format(big.mark   = " ")`** Ariary par mois.
+- La source d'éclairage qui coûte la plus chère aux ménages est la *`r cout_type_table[[1,1]]`* avec une dépense moyenne mensuelle de **`r cout_type_table[[1,2]] %>% format(big.mark   = " ")`** Ariary par mois.
 
 ---
 
@@ -302,7 +302,7 @@ source_eclairage %>%
 ---
 
 
-## Impact sur la santé
+### Impact sur la santé
 
 ```{r echo=FALSE, message=FALSE, fig.height=4}
 
@@ -310,7 +310,7 @@ source_eclairage %>%
 ```
 
 ---
-## Utilisation des technologies
+### Utilisation des technologies
 
 ```{r echo=FALSE, message=FALSE, fig.height=4}
 
@@ -318,7 +318,7 @@ source_eclairage %>%
 ```
 
 ---
-## Education
+### Education
 ```{r echo=FALSE, message=FALSE, fig.height=4}
 
 
@@ -331,7 +331,7 @@ class: center, middle
 # Résultats des enquêtes auprès des ménages
 
 ---
-## Méthodologie et description de l'échantillon
+### Méthodologie et description de l'échantillon
 
 ```{r echo=FALSE, fig.height=3, message = FALSE}
 
