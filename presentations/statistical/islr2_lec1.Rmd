@@ -1,0 +1,29 @@
+---
+title: "ISLR"
+author: "Thierry"
+date: "5/1/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r}
+library(ISLR2)
+library(tidyverse)
+
+```
+
+## Predicting wage
+
+```{r}
+
+Wage %>% head
+Wage %>% str
+
+Smarket %>% view
+
+```
+
