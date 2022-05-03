@@ -221,7 +221,7 @@ nombre_source <- source_eclairage %>%
 
 ```
 
-- La `r which.max(source_eclairage_type) %>% names` est la source d'éclairage la plus utilisée par les ménages interviewés (`r scales::percent(max(source_eclairage_type)/sum(source_eclairage_type))`). 
+- La **`r which.max(source_eclairage_type) %>% names`** est la source d'éclairage la plus utilisée par les ménages interviewés (**`r scales::percent(max(source_eclairage_type)/sum(source_eclairage_type))`**). 
 - La `r which.min(source_eclairage_type) %>% names` est la source d'éclairage la moins utilisée par les ménages interviewés (`r scales::percent(min(source_eclairage_type)/sum(source_eclairage_type))`). 
 
 ]
