@@ -376,13 +376,49 @@ emplacement_cuisine_plot %>%
 
 
 ---
-### Education
+### Education des enfants
+
+.panelset[
+.panel[.panel-name[Taux de scolarisation des enfants]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
+
+education <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q5_ENFANTS_VONT_A_L_ECOLE_SINGLE_FCT) %>% 
+  left_join(data_tidy_1$Q5_ENFANTS_VONT_A_L_ECOLE_SINGLE_FCT) %>% 
+  mutate(`scolarisation des enfants` = as.factor(correpondance)) %>% 
+  select(-Q5_ENFANTS_VONT_A_L_ECOLE_SINGLE_FCT, -correpondance)
+
+
+education_plot <- education %>% 
+  ggplot(aes(x = fct_rev(fct_infreq(`scolarisation des enfants`)))) +
+  geom_bar(aes(y = ..count../sum(..count..)), fill = "steelblue") +
+  scale_y_continuous(labels=scales::percent) +
+  geom_text(aes( label = scales::percent(..count../sum(..count..)),
+                   y= ..count../sum(..count..) ), stat= "count", hjust = -.04) +
+  ggtitle("scolarisation des enfants") +
+  coord_flip() +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+education_plot
+
+```
+
+]
+
+.panel[.panel-name[Heures d'étude]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+
 
 
 ```
 
 
+]
+]
 
 ---
 
