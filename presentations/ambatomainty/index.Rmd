@@ -53,6 +53,7 @@ library(kableExtra)
 library(mapview)
 library(sf)
 library(leaflet)
+library(plotly)
 
 ```
 
@@ -164,7 +165,15 @@ cartefemme
 
 ---
 
-### Sources d'énergie pour l'éclairage
+### Energie pour l'éclairage
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+
+```
+
+.panelset[
+.panel[.panel-name[Source d'énergie pour l'éclairage]
 
 ```{r echo=FALSE, fig.height=4}
 
@@ -176,7 +185,7 @@ source_eclairage <- data_roster %>%
   select(-correpondance)
 theme_set(theme_light())
 
-source_eclairage %>% 
+source_eclairage_plot <- source_eclairage %>% 
   ggplot(aes(x = fct_rev(fct_infreq(Q1_SOURCE_ECLAIRAGE_SINGLE_FCT)))) +
   geom_bar(aes(y = ..count../sum(..count..)), fill = "lightblue") +
   scale_y_continuous(labels=scales::percent) +
@@ -187,7 +196,9 @@ source_eclairage %>%
   labs(
     x = NULL,
     y = "pourcentage"
-  )
+  ) 
+
+source_eclairage_plot
 
 # Type de lampe à pétrole
 type_lampe_petrole <- source_eclairage %>% 
@@ -217,9 +228,9 @@ nombre_source <- source_eclairage %>%
 - La `r which.max(source_eclairage_type) %>% names` est la source d'éclairage la plus utilisée par les ménages interviewés (`r scales::percent(max(source_eclairage_type)/sum(source_eclairage_type))`). 
 - La `r which.min(source_eclairage_type) %>% names` est la source d'éclairage la moins utilisée par les ménages interviewés (`r scales::percent(min(source_eclairage_type)/sum(source_eclairage_type))`). 
 
+]
 
----
-### Nombre de source d'éclairage par ménage
+.panel[.panel-name[Nombre de source d'éclairage par ménage]
 
 ```{r echo=FALSE, fig.height=4}
 
@@ -240,10 +251,10 @@ nombre_source$nombre_source %>% table() %>% broom::tidy() %>%
 ```
 
 - Parmi les ménages interviewés, 25% utilisent deux types de sources d'éclairage. La plupart utilisent en même temps des lampes à pétrole et des torches électrique.
+]
 
----
 
-### Dépenses des ménages pour l'éclairage
+.panel[.panel-name[Dépenses des ménages pour l'éclairage]
 
 ```{r echo=FALSE, message=FALSE, fig.height=5}
 # Coût mensuel
@@ -279,9 +290,9 @@ cout_type_table <- cout_type %>%
 
 - La source d'éclairage qui coûte la plus chère aux ménages est la *`r cout_type_table[[1,1]]`* avec une dépense moyenne mensuelle de **`r cout_type_table[[1,2]] %>% format(big.mark   = " ")`** Ariary par mois.
 
----
+]
 
-### Durée d'utilisation des sources d'éclairage
+.panel[.panel-name[Durée d'utilisation des sources d'éclairage]
 
 ```{r echo=FALSE, message=FALSE, fig.height=4}
 
@@ -298,7 +309,8 @@ source_eclairage %>%
 
 ```
 
-
+]
+]
 ---
 
 
