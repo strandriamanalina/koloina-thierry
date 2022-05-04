@@ -40,7 +40,7 @@ options(htmltools.dir.version = FALSE)
 ```
 
 
-```{r include=FALSE}
+```{r include=FALSE, warning=FALSE}
 
 # load packages
 library(tidyverse)
@@ -88,7 +88,7 @@ class: center, middle
 
 ### Village d'Ambatomainty
 
-```{r echo=FALSE}
+```{r echo=FALSE, message=FALSE}
 
 data <- read.csv(here::here("data", "Ambatomainty", "Exported_Baseline_Ambatomainty.txt"), sep = ";", strip.white = TRUE, na.strings = c("", NA)) %>%   mutate(DATE = dmy(DATE))
 
@@ -118,17 +118,33 @@ data_roster <- data %>%
 data_qcm <- data %>%
   select(NUMERO_QUESTIONNAIRE, ends_with("_MULT_FCT"))
 
+# creatong a function for plotting bar chart
+
+bar_plot <- function(data, x){
+  ggplot(data, aes(x = fct_rev(fct_infreq({{x}})))) +
+  geom_bar(aes(y = ..count../sum(..count..)), fill = "steelblue") +
+  scale_y_continuous(labels=scales::percent) +
+  expand_limits(y = 1) +
+  geom_text(aes( label = scales::percent(..count../sum(..count..)),
+                   y= ..count../sum(..count..) ), stat= "count", hjust = -.04) +
+  coord_flip()
+}
 
 
 ```
 
 ---
 ### Résumé exécutif
+```{r echo=FALSE, message=FALSE}
+
+```
+
+
 
 ---
 ### Localisation
 
-```{r echo=FALSE, fig.height=5, fig.width=10}
+```{r echo=FALSE, message=FALSE, fig.height=5, fig.width=10}
 
 cart <- read_excel(here::here("data","data_villages.xlsx"))
 
@@ -171,7 +187,7 @@ xaringanExtra::use_panelset()
 .panelset[
 .panel[.panel-name[Source d'énergie pour l'éclairage]
 
-```{r echo=FALSE, fig.height=4}
+```{r echo=FALSE, message = FALSE, fig.height=4}
 
 # Source d'éclairage
 
@@ -181,18 +197,16 @@ source_eclairage <- data_roster %>%
   select(-correpondance)
 theme_set(theme_light())
 
-source_eclairage_plot <- source_eclairage %>% 
-  ggplot(aes(x = fct_rev(fct_infreq(Q1_SOURCE_ECLAIRAGE_SINGLE_FCT)))) +
-  geom_bar(aes(y = ..count../sum(..count..)), fill = "lightblue") +
-  scale_y_continuous(labels=scales::percent) +
+source_eclairage_plot <- source_eclairage %>%
+  bar_plot(Q1_SOURCE_ECLAIRAGE_SINGLE_FCT) +
   geom_text(aes( label = scales::percent(..count../sum(..count..)),
                    y= ..count../sum(..count..) ), stat= "count", hjust = -.04) +
   ggtitle("éclairage utilisé par les ménages") +
-  coord_flip() +
   labs(
     x = NULL,
     y = "pourcentage"
   ) 
+
 
 source_eclairage_plot
 
@@ -228,7 +242,7 @@ nombre_source <- source_eclairage %>%
 
 .panel[.panel-name[Nombre de source d'éclairage par ménage]
 
-```{r echo=FALSE, fig.height=4}
+```{r echo=FALSE, message=FALSE, fig.height=4}
 
 nombre_source$nombre_source %>% table() %>% broom::tidy() %>%  
   rename(`Nombre d'éclairage utilisé` = ".", 
@@ -322,12 +336,13 @@ cuisson <- data_qcm %>%
   select(-correpondance, -Q3_ENERGIE_DE_CUISSON_MULT_FCT)
 
 cuisson_plot <- cuisson %>%
-  count(`énergie de cuisson`) %>% 
-  mutate(pourcentage =  round(n/sum(n), digits = 2)) %>% 
-  ggplot(aes(x = `énergie de cuisson`, y = pourcentage)) +
-  geom_col(fill = "steelblue") +
-  scale_y_continuous(labels = scales::percent) 
-  
+  bar_plot(`énergie de cuisson`) +
+  ggtitle("énergie de cuisson utilisée par les ménages") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
 cuisson_plot 
 
 cuisson_table <- cuisson %>%
@@ -367,9 +382,16 @@ emplacement_cuisine_plot <- emplacement_cuisine %>%
 
 emplacement_cuisine_plot %>% 
   ggplot(aes(x = `emplacement cuisine`)) +
-  geom_bar(aes(fill = `énergie de cuisson`)) 
+  geom_bar(aes(fill = `énergie de cuisson`), position = "dodge") +
+  labs(
+    y = NULL  )  +
+  ggtitle("croisement entre l'emplacement de la cuisine et le type d'énergie de cuisson utilisé")
+
+  
 
 ```
+
+Etant donné que la grande majorité des cuisines sont à l'intérieur, il n'y a pas d'interprétation pertinente.
 
 ]
 ]
@@ -379,6 +401,35 @@ emplacement_cuisine_plot %>%
 ### Education des enfants
 
 .panelset[
+.panel[.panel-name[Nombre d'enfants]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+enfants <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, NOMBRE_ENFANTS_NUM) 
+
+enfants %>% 
+  ggplot(aes(NOMBRE_ENFANTS_NUM)) +
+  geom_bar(fill = "steelblue") +
+  scale_x_continuous(breaks = c(min(enfants$NOMBRE_ENFANTS_NUM):max(enfants$NOMBRE_ENFANTS_NUM))) +
+  labs(
+    x = "nombre d'enfants",
+    y = NULL  )  +
+  ggtitle("Nombre d'enfants par ménage")
+
+
+nombre_enfants <- enfants %>% 
+  summarise(moyenne = mean(NOMBRE_ENFANTS_NUM),
+            maximum = max(NOMBRE_ENFANTS_NUM),
+            mediane = median(NOMBRE_ENFANTS_NUM),
+            sd = sd(NOMBRE_ENFANTS_NUM) %>% round(2))
+
+
+```
+
+En  moyenne, le nombre d'enfants par ménage est  **`r nombre_enfants[[1]]`**. La médiane est de **`r nombre_enfants[[3]]`** enfants.
+
+
+]
 .panel[.panel-name[Taux de scolarisation des enfants]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
 
@@ -390,15 +441,10 @@ education <- data %>%
 
 
 education_plot <- education %>% 
-  ggplot(aes(x = fct_rev(fct_infreq(`scolarisation des enfants`)))) +
-  geom_bar(aes(y = ..count../sum(..count..)), fill = "steelblue") +
-  scale_y_continuous(labels=scales::percent) +
-  geom_text(aes( label = scales::percent(..count../sum(..count..)),
-                   y= ..count../sum(..count..) ), stat= "count", hjust = -.04) +
+  bar_plot(`scolarisation des enfants`) +
   ggtitle("scolarisation des enfants") +
-  coord_flip() +
   labs(
-    x = NULL,
+    x = "est-ce que les enfants sont scolarisés",
     y = "pourcentage"
   ) 
 
@@ -410,7 +456,61 @@ education_plot
 
 .panel[.panel-name[Heures d'étude]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
+# Nombre d'heures d'étude
+heure_etude <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q6_N_H_LECTURE_OU_ETUDE_SINGLE_FCT) %>% 
+  left_join(data_tidy_1$Q6_N_H_LECTURE_OU_ETUDE_SINGLE_FCT) %>% 
+  mutate(`nombre d'heure d'étude` = correpondance) %>% 
+  select(-Q6_N_H_LECTURE_OU_ETUDE_SINGLE_FCT, -correpondance) %>% 
+  mutate(`nombre d'heure d'étude`  = ifelse(`nombre d'heure d'étude`=="Pas applicable", NA, `nombre d'heure d'étude`)) %>% 
+  na.omit()
 
+heure_etude %>% 
+  bar_plot(`nombre d'heure d'étude`)+
+  ggtitle("nombre d'heures d'étude") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  )
+
+```
+
+
+]
+.panel[.panel-name[moment étude]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+# Nombre d'heures d'étude
+moment_etude <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q7_MOMENT_DEVOIRS_SINGLE_FCT) %>%
+  mutate(Q7_MOMENT_DEVOIRS_SINGLE_FCT = strsplit(Q7_MOMENT_DEVOIRS_SINGLE_FCT, "")) %>%
+  unnest(Q7_MOMENT_DEVOIRS_SINGLE_FCT) %>%
+  left_join(data_tidy_1$Q7_MOMENT_DEVOIRS_SINGLE_FCT) %>% 
+  mutate(`moment de la journée étude` = correpondance) %>% 
+  select(-Q7_MOMENT_DEVOIRS_SINGLE_FCT, -correpondance) %>% 
+  mutate(`moment de la journée étude`   = ifelse(`moment de la journée étude` =="Pas applicable", NA, `moment de la journée étude` )) %>% 
+  na.omit()
+
+moment_etude %>% 
+  bar_plot(`moment de la journée étude`)+
+  ggtitle("Moment de la journée pour l'étude") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  )
+
+# Moment de la journée pour étude et durée
+moment_heure <- moment_etude %>% 
+  full_join(heure_etude) %>% 
+  na.omit()
+
+moment_heure %>% 
+  ggplot(aes(x = `moment de la journée étude`)) +
+  geom_bar(aes(fill = `nombre d'heure d'étude`), position = "dodge") +
+  ggtitle("Moment de la journée pour l'étude") +
+  labs(
+    x = NULL,
+    y = NULL
+  )
 
 
 
@@ -418,6 +518,7 @@ education_plot
 
 
 ]
+
 ]
 
 ---
@@ -442,7 +543,7 @@ education_plot
 ---
 class: center, middle
 
-# Résultats des enquêtes auprès des ménages
+# Description de l'échantillon
 
 ---
 ### Méthodologie et description de l'échantillon

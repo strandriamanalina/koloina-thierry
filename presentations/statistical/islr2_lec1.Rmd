@@ -23,7 +23,7 @@ library(tidyverse)
 Wage %>% head
 Wage %>% str
 
-Smarket %>% view
+Smarket %>% str
 
 ```
 
