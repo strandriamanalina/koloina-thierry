@@ -452,6 +452,8 @@ education_plot
 
 ```
 
+
+
 ]
 
 .panel[.panel-name[Heures d'étude]
@@ -512,13 +514,76 @@ moment_heure %>%
     y = NULL
   )
 
+moment_etude_tbl <- moment_etude %>% 
+  count(`moment de la journée étude`, sort = TRUE)
+
+heure_etude_tbl <- heure_etude %>%
+  group_by(`nombre d'heure d'étude`) %>% 
+  count(sort = TRUE)
+
 
 
 ```
 
+Les enfants étudient surtout le **`r moment_etude_tbl[[1,1]]`** (*`r (moment_etude_tbl[[1,2]]/colSums(moment_etude_tbl[2])) %>% scales::percent()`*) avec une majorité (*`r (heure_etude_tbl[[1,2]]/colSums(heure_etude_tbl[2])) %>% scales::percent()`*) qui étudie **`r heure_etude_tbl[[1,1]]`**.
+
+]
+]
+
+---
+### Eclairage dans les activités quotidiennes
+
+.panelset[
+
+.panel[.panel-name[éclairage pour les études]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+satisfaction <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q8_ECLAIRAGE_ETUDE_SUFFISANT_SINGLE_FCT) %>% 
+  left_join(data_tidy_1$Q8_ECLAIRAGE_ETUDE_SUFFISANT_SINGLE_FCT) %>% 
+  mutate(`satisfaction par rapport à l'éclairage pour l'étude` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>% 
+  select(-Q8_ECLAIRAGE_ETUDE_SUFFISANT_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+satisfaction_tbl <- satisfaction %>% 
+  count(`satisfaction par rapport à l'éclairage pour l'étude`, sort = TRUE) %>%
+  mutate(n = (n/sum(n)) %>% scales::percent()) 
+
+satisfaction_tbl %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+
+
+```
+
+La majorité des ménages enquêtés (*`r satisfaction_tbl[[1,2]]`*) se déclarent **`r ifelse(satisfaction_tbl[[1,1]]=="Non", "non satisfaits", "satisfaits")`** de leur éclairage pour étudier.
 
 ]
 
+.panel[.panel-name[éclairage dans la vie quotidienne]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+satisfaction_quotidien <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q9_ECLAIRAGE_SUFFISANT_ACTIVITE_SINGLE_FCT) %>%
+  mutate(Q9_ECLAIRAGE_SUFFISANT_ACTIVITE_SINGLE_FCT = as.character(Q9_ECLAIRAGE_SUFFISANT_ACTIVITE_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q9_ECLAIRAGE_SUFFISANT_ACTIVITE_SINGLE_FCT) %>% 
+  mutate(`satisfaction pour les activités quotidiennes` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>% 
+  select(-Q9_ECLAIRAGE_SUFFISANT_ACTIVITE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+satisfaction_quotidien_tbl <- satisfaction_quotidien %>% 
+  count(`satisfaction pour les activités quotidiennes`, sort = TRUE) %>%
+  mutate(n = (n/sum(n)) %>% scales::percent()) 
+
+satisfaction_quotidien_tbl %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+```
+
+La majorité des ménages enquêtés (*`r satisfaction_quotidien_tbl[[1,2]]`*) se déclarent **`r ifelse(satisfaction_quotidien_tbl[[1,1]]=="Non", "non satisfaits", "satisfaits")`** de leur éclairage pour étudier.
+]
 ]
 
 ---
