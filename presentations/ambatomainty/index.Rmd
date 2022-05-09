@@ -588,6 +588,68 @@ La majorité des ménages enquêtés (*`r satisfaction_quotidien_tbl[[1,2]]`*) s
 
 ---
 
+### Participation des femmes
+
+.panelset[
+
+.panel[.panel-name[participation des femmes aux AGR]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+participation_agr <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q10_PARTICIPATION_FEMMES_AUX_AGR_SINGLE_FCT:Q10_2_REVENU_AGR_PAR_MOIS_NUM) %>%
+  mutate(Q10_PARTICIPATION_FEMMES_AUX_AGR_SINGLE_FCT = as.character(Q10_PARTICIPATION_FEMMES_AUX_AGR_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q10_PARTICIPATION_FEMMES_AUX_AGR_SINGLE_FCT) %>% 
+  mutate(`participation des femmes aux AGR` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>% 
+  select(-Q10_PARTICIPATION_FEMMES_AUX_AGR_SINGLE_FCT, -correpondance)
+
+participation_agr_tbl <- participation_agr %>% 
+  count(`participation des femmes aux AGR`, sort = TRUE) %>% 
+  mutate(n = (n/sum(n)) %>% scales::percent()) 
+
+participation_agr_tbl %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+
+```
+
+La majorité des femmes (*`r participation_agr_tbl[[1,2]]`*)  **`r ifelse(participation_agr_tbl[[1,1]]=="Non", "participent", "ne participent pas")`** aux revenus du ménage.
+
+]
+
+.panel[.panel-name[activité des femmes]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+agr_femmes <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q11_TYPE_D_ACTIVITE_MULT_FCT) %>%
+  unnest(Q11_TYPE_D_ACTIVITE_MULT_FCT) %>% 
+  left_join(data_tidy_1$Q11_TYPE_D_ACTIVITE_MULT_FCT) %>% 
+  mutate(`activité des femmes` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q11_TYPE_D_ACTIVITE_MULT_FCT, -correpondance) %>% 
+  na.omit()
+
+agr_femmes_tbl <- agr_femmes %>% 
+  group_by(`activité des femmes`) %>% 
+  count(sort = TRUE) 
+
+agr_femmes %>% 
+  bar_plot(`activité des femmes`) +
+  ggtitle("AGR des femmes") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+
+```
+
+L'activité qui pourrait générer un revenu et qui susceptible d'être le plus pratiqué par les femmes est la **`r agr_femmes_tbl[[1,1]]`**.
+
+]
+]
+
+---
+
 
 ### Impact sur la santé
 
