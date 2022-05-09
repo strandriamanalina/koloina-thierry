@@ -559,13 +559,8 @@ sexe <- data %>%
 
 
 sexe %>% 
-  ggplot(aes(x = SEXE_SINGLE_FCT)) +
-  geom_bar(aes(y = ..count../sum(..count..)), fill = "lightblue") +
-  scale_y_continuous(labels=scales::percent) +
-  geom_text(aes( label = scales::percent(..count../sum(..count..)),
-                   y= ..count../sum(..count..) ), stat= "count", hjust = -.05) +
+  bar_plot(SEXE_SINGLE_FCT) +
   ggtitle("Sexe des enquêtés") +
-  coord_flip() +
   labs(
     x = NULL,
     y = "pourcentage"
