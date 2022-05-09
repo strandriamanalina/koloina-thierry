@@ -588,7 +588,7 @@ La majorité des ménages enquêtés (*`r satisfaction_quotidien_tbl[[1,2]]`*) s
 
 ---
 
-### Participation des femmes
+### AGR des femmes
 
 .panelset[
 
@@ -649,22 +649,99 @@ L'activité qui pourrait générer un revenu et qui susceptible d'être le plus 
 ]
 
 ---
+### Impact de l'utilisation de l'éclairage
 
+.panelset[
 
-### Impact sur la santé
-
+.panel[.panel-name[Fumée noire]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
 
 
 ```
+
+]
+.panel[.panel-name[autres impacts]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+
+```
+
+
+]
+]
 
 ---
-### Utilisation des technologies
+### Emancipation des femmes
 
+.panelset[
+
+.panel[.panel-name[Femmes disposant d'un compte bancaire]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
 
 
 ```
+
+]
+.panel[.panel-name[sécurité la nuit]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+
+```
+
+
+]
+
+.panel[.panel-name[participation dans les associations]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+
+```
+
+
+]
+
+.panel[.panel-name[décision dans le ménage]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+
+```
+
+
+]
+
+
+]
+
+---
+### Utilisation des téléphones
+
+.panelset[
+
+.panel[.panel-name[Utilisation des téléphones]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+
+```
+
+]
+.panel[.panel-name[Charge du téléphone]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+
+```
+
+
+]
+
+.panel[.panel-name[Utilisation de radio]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+
+```
+
+
+]
+]
 
 
 ---
@@ -695,4 +772,22 @@ sexe %>%
 
 
 ```
+
+
+---
+class: center, middle
+
+# Résultats du focus group
+
+---
+
+### Résultats principaux
+
+```{r echo=FALSE, fig.height=3, message = FALSE}
+
+
+
+```
+
+
 
