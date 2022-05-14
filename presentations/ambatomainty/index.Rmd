@@ -118,7 +118,7 @@ data_roster <- data %>%
 data_qcm <- data %>%
   select(NUMERO_QUESTIONNAIRE, ends_with("_MULT_FCT"))
 
-# creatong a function for plotting bar chart
+# creating a function for plotting bar chart
 
 bar_plot <- function(data, x){
   ggplot(data, aes(x = fct_rev(fct_infreq({{x}})))) +
@@ -136,6 +136,7 @@ bar_plot <- function(data, x){
 ---
 ### Résumé exécutif
 ```{r echo=FALSE, message=FALSE}
+
 
 ```
 
@@ -319,8 +320,8 @@ source_eclairage %>%
 
 ```
 
-]
-]
+]]
+
 ---
 ### Energie de cuisson
 
