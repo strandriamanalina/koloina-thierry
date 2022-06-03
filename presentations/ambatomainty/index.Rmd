@@ -140,7 +140,7 @@ bar_plot <- function(data, x){
 
 ```
 
-
+Résumé excecutif ambatomainty ci-après
 
 ---
 ### Localisation
