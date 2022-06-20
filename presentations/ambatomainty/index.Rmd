@@ -651,23 +651,87 @@ L'activité qui pourrait générer un revenu et qui susceptible d'être le plus 
 ]
 
 ---
-### Impact de l'utilisation de l'éclairage
+### Situation de la santé
 
 .panelset[
 
 .panel[.panel-name[Fumée noire]
-```{r echo=FALSE, message=FALSE, fig.height=4}
+```{r echo=FALSE, message=FALSE, fig.height=3}
+
+fumee_noire <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q12_FUMEE_NOIR_ECLAIRAGE_SINGLE_FCT)  %>%
+  mutate(Q12_FUMEE_NOIR_ECLAIRAGE_SINGLE_FCT = as.character(Q12_FUMEE_NOIR_ECLAIRAGE_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q12_FUMEE_NOIR_ECLAIRAGE_SINGLE_FCT) %>% 
+  mutate(`fumée noire` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q12_FUMEE_NOIR_ECLAIRAGE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+fumee_noire %>%
+  bar_plot(`fumée noire`) +
+  ggtitle("existence de fumée noire pour l'éclairage") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  )
+
+count_fumee_noire <- fumee_noire %>% 
+  group_by(`fumée noire`) %>% 
+  count(sort = TRUE) 
+
+
+incendie <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q14_CAS_INCENDIE_BRULURE_SINGLE_FCT)  %>%
+  mutate(Q14_CAS_INCENDIE_BRULURE_SINGLE_FCT = as.character(Q14_CAS_INCENDIE_BRULURE_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q14_CAS_INCENDIE_BRULURE_SINGLE_FCT) %>% 
+  mutate(`incendie` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q14_CAS_INCENDIE_BRULURE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+cas_incendie <- incendie %>% 
+  group_by(incendie) %>% 
+  count(incendie)
 
 
 ```
+
+**`r ((count_fumee_noire$n/sum(count_fumee_noire$n)) %>% scales::percent())[1]`** des interviewés déclarent que l'éclairage qu'ils utilisent fait ressortir de la fumée noire.
+`r ifelse(any(cas_incendie$incendie == "Oui"), "Il y a eu des cas d'incendie causé par l'utilisation de l'éclairage", "Il n'y a pas eu de cas d'incendie causé par l'utilisation de l'éclairage")` parmi les interviewés.
 
 ]
-.panel[.panel-name[autres impacts]
+.panel[.panel-name[problèmes de santé]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
+
+sante <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q13_PROBLEME_DE_SANTE_MULT_FCT) %>%
+  unnest(Q13_PROBLEME_DE_SANTE_MULT_FCT) %>% 
+  left_join(data_tidy_1$Q13_PROBLEME_DE_SANTE_MULT_FCT) %>% 
+  mutate(`problèmes de santé` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q13_PROBLEME_DE_SANTE_MULT_FCT, -correpondance) %>% 
+  na.omit()
+
+sante_tbl <- sante %>% 
+  group_by(`problèmes de santé`) %>% 
+  count(sort = TRUE) 
+
+sante %>% 
+  bar_plot(`problèmes de santé`) +
+  ggtitle("problèmes de santé") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+autre_probleme <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q13_J_AUTRE_PROBLEME_SANTE_CHR) %>% 
+  na.omit()
 
 
 ```
 
+Le problème de santé le prévalent selon les interviewés est le **`r sante_tbl[1,1]`**(`r ((sante_tbl$n/sum(sante_tbl$n)) %>% scales::percent())[1]`). 
+
+
+Voici les autres maladies citées par les interviewés : `r paste(autre_probleme$Q13_J_AUTRE_PROBLEME_SANTE_CHR, collapse = ", ")`.
 
 ]
 ]
@@ -678,18 +742,66 @@ L'activité qui pourrait générer un revenu et qui susceptible d'être le plus 
 .panelset[
 
 .panel[.panel-name[Femmes disposant d'un compte bancaire]
-```{r echo=FALSE, message=FALSE, fig.height=4}
+```{r echo=FALSE, message=FALSE, fig.height=3}
+
+compte_bancaire <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q15_FEMME_AYANT_COMPTE_BANCAIRE_SINGLE_FCT)  %>%
+  mutate(Q15_FEMME_AYANT_COMPTE_BANCAIRE_SINGLE_FCT = as.character(Q15_FEMME_AYANT_COMPTE_BANCAIRE_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q15_FEMME_AYANT_COMPTE_BANCAIRE_SINGLE_FCT) %>% 
+  mutate(`femmes disposant d'un compte bancaire` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q15_FEMME_AYANT_COMPTE_BANCAIRE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+compte_bancaire %>%
+  bar_plot(`femmes disposant d'un compte bancaire`) +
+  ggtitle("femmes disposant d'un compte bancaire") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  )
+
+count_compte_bancaire <- compte_bancaire %>% 
+  group_by(`femmes disposant d'un compte bancaire`) %>% 
+  count(sort = TRUE) 
+
+percent_compte <- count_compte_bancaire %>% 
+  filter(`femmes disposant d'un compte bancaire`=="Non")
 
 
 ```
+
+**`r (percent_compte[[2]]/nrow(compte_bancaire)) %>% scales::percent()`** des enquêtés déclarent que les femmes ne disposent pas de compte bancaire.
 
 ]
 .panel[.panel-name[sécurité la nuit]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
 
+securite <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q16_FEMME_EN_SECURITE_LA_NUIT_SINGLE_FCT)  %>%
+  mutate(Q16_FEMME_EN_SECURITE_LA_NUIT_SINGLE_FCT = as.character(Q16_FEMME_EN_SECURITE_LA_NUIT_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q16_FEMME_EN_SECURITE_LA_NUIT_SINGLE_FCT) %>% 
+  mutate(`femmes en sécurité  la nuit` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q16_FEMME_EN_SECURITE_LA_NUIT_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+securite %>%
+  bar_plot(`femmes en sécurité  la nuit`) +
+  ggtitle("femmes se sentent en sécurité la nuit") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  )
+
+securite_tbl <- securite %>% 
+  group_by(`femmes en sécurité  la nuit`) %>% 
+  count(sort = TRUE) 
+
+percent_securite <- securite_tbl %>% 
+  filter(`femmes en sécurité  la nuit`=="Non")
 
 ```
 
+**`r  (percent_securite[[2]]/nrow(securite)) %>%  scales::percent()`** des enquêtés déclarent que les femmes ne se sentent pas en sécurité la nuit.
 
 ]
 
