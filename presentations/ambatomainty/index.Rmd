@@ -94,9 +94,19 @@ data <- read.csv(here::here("data", "Ambatomainty", "Exported_Baseline_Ambatomai
 
 valueset <- read_excel(here::here("data", "disctionary_suivi.xlsx"), 4)
 
+focus <- read.csv(here::here("data", "Ambatomainty", "Exported_Focus_Ambatomainty.txt"), sep = ";", strip.white = TRUE, na.strings = c("", NA))
+
+# focus valueset list
+focus_valueset <- read_excel(here::here("data", "disctionary_focus.xlsx"), 2)
+
+focus_tidy <- focus_valueset %>% 
+  select(choix, correpondance) %>% 
+  split(focus_valueset$variable) %>% 
+  imap(function(x,y) x %>% rename_with(~paste(y), 1))
 # remplacer les valeurs de la colonne choix par celles de correspondance dans data
 valueset_list <- valueset %>% select(choix, correpondance) %>% 
   split(valueset$variable)
+
 
 # Changer le nom de toutes les colonnes
 data_tidy_1 <- valueset_list %>% 
@@ -624,6 +634,7 @@ La majorité des femmes (*`r participation_agr_tbl[[1,2]]`*)  **`r ifelse(partic
 
 agr_femmes <- data %>% 
   select(NUMERO_QUESTIONNAIRE, Q11_TYPE_D_ACTIVITE_MULT_FCT) %>%
+  mutate(Q11_TYPE_D_ACTIVITE_MULT_FCT = strsplit(Q11_TYPE_D_ACTIVITE_MULT_FCT,"")) %>% 
   unnest(Q11_TYPE_D_ACTIVITE_MULT_FCT) %>% 
   left_join(data_tidy_1$Q11_TYPE_D_ACTIVITE_MULT_FCT) %>% 
   mutate(`activité des femmes` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
@@ -703,6 +714,7 @@ cas_incendie <- incendie %>%
 
 sante <- data %>% 
   select(NUMERO_QUESTIONNAIRE, Q13_PROBLEME_DE_SANTE_MULT_FCT) %>%
+  mutate(Q13_PROBLEME_DE_SANTE_MULT_FCT = strsplit(Q13_PROBLEME_DE_SANTE_MULT_FCT,"")) %>% 
   unnest(Q13_PROBLEME_DE_SANTE_MULT_FCT) %>% 
   left_join(data_tidy_1$Q13_PROBLEME_DE_SANTE_MULT_FCT) %>% 
   mutate(`problèmes de santé` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
@@ -939,7 +951,7 @@ paiement_moyen <- paiement %>%
 
 ```
 
-le coût moyen payé par les ménages pour recharger le téléphone est de `r paiement_moyen[[1]]` Ariary.
+Le coût moyen payé par les ménages pour recharger le téléphone est de `r paiement_moyen[[1]]` Ariary.
 
 ]
 
@@ -961,7 +973,7 @@ class: center, middle
 # Description de l'échantillon
 
 ---
-### Méthodologie et description de l'échantillon
+### description de l'échantillon
 
 ```{r echo=FALSE, fig.height=3, message = FALSE}
 
@@ -994,11 +1006,113 @@ class: center, middle
 
 ### Résultats principaux
 
-```{r echo=FALSE, fig.height=3, message = FALSE}
+.panelset[
 
+.panel[.panel-name[infrastructures]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+infrastructure <- focus %>%
+  select(FOCUS_GROUP_ID, Q1_INFRASTRUCTURE_SINGLE_FCT_1:Q1_INFRASTRUCTURE_SINGLE_FCT_8) %>% 
+  pivot_longer(-FOCUS_GROUP_ID, 
+               names_to =c(".value", "set"),
+               names_pattern = "(.+)_(.)",
+               values_drop_na = TRUE) %>% 
+  left_join(focus_tidy$Q1_INFRASTRUCTURE_SINGLE_FCT) %>% 
+  mutate(`infrastructure présente` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q1_INFRASTRUCTURE_SINGLE_FCT, -correpondance, -set) %>% 
+  na.omit()
+
+infrastructure %>% 
+  distinct(`infrastructure présente`) %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+```
+
+
+]
+.panel[.panel-name[Groupes existant dans le village]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+groupe <- focus %>% 
+  select(FOCUS_GROUP_ID, Q1_GROUP_TYPE_MULT_FCT) %>%
+  mutate(Q1_GROUP_TYPE_MULT_FCT = strsplit(Q1_GROUP_TYPE_MULT_FCT,"")) %>% 
+  unnest(Q1_GROUP_TYPE_MULT_FCT) %>%
+  left_join(focus_tidy$Q1_GROUP_TYPE_MULT_FCT) %>% 
+  mutate(`groupes existants dans le village` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q1_GROUP_TYPE_MULT_FCT, -correpondance) %>% 
+  na.omit()
+
+
+groupe %>% 
+  distinct(`groupes existants dans le village`) %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+```
+
+
+
+]
+
+.panel[.panel-name[Source d'eau]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+source <- focus %>% 
+  select(FOCUS_GROUP_ID, Q2_WATER_SOURCE_SINGLE_FCT_1:Q2_WATER_SOURCE_SINGLE_FCT_5) %>% 
+  pivot_longer(-FOCUS_GROUP_ID, 
+               names_to =c(".value", "set"),
+               names_pattern = "(.+)_(.)",
+               values_drop_na = TRUE) %>% 
+  left_join(focus_tidy$Q2_WATER_SOURCE_SINGLE_FCT) %>% 
+  mutate(`source d'eau présente` = ifelse(correpondance == "Autre", NA, correpondance)) %>%
+  select(-Q2_WATER_SOURCE_SINGLE_FCT, -correpondance, -set) %>% 
+  na.omit()
+
+autre_source <- focus %>% 
+  select(FOCUS_GROUP_ID, Q2_E_OTHER_WATER_SOURCE_CHR_1:Q2_E_OTHER_WATER_SOURCE_CHR_5) %>% 
+  pivot_longer(-FOCUS_GROUP_ID, 
+               names_to =c(".value", "set"),
+               names_pattern = "(.+)_(.)",
+               values_drop_na = TRUE) %>% 
+  mutate(`source d'eau présente` = Q2_E_OTHER_WATER_SOURCE_CHR) %>% 
+  select(-Q2_E_OTHER_WATER_SOURCE_CHR, -set)
+
+eau <- bind_rows(source, autre_source)
+
+eau %>% 
+  distinct(`source d'eau présente`) %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+```
+
+
+]
+
+.panel[.panel-name[livelihood]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+livelihood <- focus %>% 
+  select(FOCUS_GROUP_ID, Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT) %>% 
+  mutate(Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT = strsplit(Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT,"")) %>% 
+  unnest(Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT) %>% 
+  left_join(focus_tidy$Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT) %>% 
+  mutate(`activités économiques principales` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+  
+
+livelihood %>% 
+  distinct(`activités économiques principales`) %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
 
 
 ```
 
+
+]
+]
 
 
