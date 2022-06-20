@@ -808,6 +808,25 @@ percent_securite <- securite_tbl %>%
 .panel[.panel-name[participation dans les associations]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
 
+participation_assoc <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q17_PARTICIPATION_FEMMES_ASSOC_MULT_FCT) %>%
+  unnest(Q17_PARTICIPATION_FEMMES_ASSOC_MULT_FCT) %>% 
+  left_join(data_tidy_1$Q17_PARTICIPATION_FEMMES_ASSOC_MULT_FCT) %>% 
+  mutate(`participation des femmes dans les associations` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q17_PARTICIPATION_FEMMES_ASSOC_MULT_FCT, -correpondance) %>% 
+  na.omit()
+
+assoc_tbl <- participation_assoc %>% 
+  group_by(`participation des femmes dans les associations`) %>% 
+  count(sort = TRUE) 
+
+participation_assoc %>% 
+  bar_plot(`participation des femmes dans les associations`) +
+  ggtitle("participation des femmes dans les associations") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
 
 ```
 
@@ -817,9 +836,31 @@ percent_securite <- securite_tbl %>%
 .panel[.panel-name[décision dans le ménage]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
 
+decision <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q20_PRISE_DECISION_DEPENSES_SINGLE_FCT) %>%
+  left_join(data_tidy_1$Q20_PRISE_DECISION_DEPENSES_SINGLE_FCT) %>% 
+  mutate(`prise de décision dans le ménage` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q20_PRISE_DECISION_DEPENSES_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+decision_tbl <- decision %>% 
+  group_by(`prise de décision dans le ménage`) %>% 
+  count(sort = TRUE) 
+
+decision %>% 
+  bar_plot(`prise de décision dans le ménage`) +
+  ggtitle("prise de décision dans le ménage") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+decision_percent <- decision_tbl %>% 
+  mutate(percent = n/nrow(decision))
 
 ```
 
+Dans le ménage, la prise de décision se fait par **`r decision_percent[[1,1]]`(`r decision_percent[[1,3]] %>% scales::percent()`)**.
 
 ]
 
@@ -833,22 +874,78 @@ percent_securite <- securite_tbl %>%
 
 .panel[.panel-name[Utilisation des téléphones]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
+# téléphone par ménage
+telephone <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM) %>% 
+  mutate(Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM = as.character(Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM))
 
+telephone %>% 
+  bar_plot(Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM) +
+  ggtitle("Nombre de téléphones détenu dans le ménage") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+telephone_percent <- telephone %>% 
+  group_by(Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM) %>% 
+  count() %>% 
+  mutate(percent = (n/nrow(telephone)) %>% scales::percent())
+
+
+un_phone <- telephone %>%
+  mutate(nombre = case_when(
+    Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM > 0 ~ "au moins un téléphone",
+    TRUE ~ Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM
+  )) %>% 
+  group_by(nombre) %>% 
+  count() %>% 
+  mutate(percent = (n/nrow(telephone)) %>% scales::percent()) %>% 
+  filter(nombre == "au moins un téléphone")
+  
 
 ```
+
+**`r un_phone[[1,3]]`** des ménages interviewés possèdent au moins un téléphone.
 
 ]
 .panel[.panel-name[Charge du téléphone]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
 
+charge_phone <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q22_LIEU_DE_CHARGE_TELEPHONE_SINGLE_FCT) %>% 
+  left_join(data_tidy_1$Q22_LIEU_DE_CHARGE_TELEPHONE_SINGLE_FCT) %>% 
+  mutate(`lieu de charge du téléphone` = ifelse(correpondance == "Autre", NA, correpondance)) %>%
+  select(-Q22_LIEU_DE_CHARGE_TELEPHONE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+  
+
+charge_phone %>% 
+  bar_plot(`lieu de charge du téléphone`) +
+  ggtitle("`lieu de charge du téléphone`") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+autre_charge <- data %>% 
+  select(Q22_D_AUTRE_LIEU_DE_CHARGE_CHR)
+
+paiement <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q23_PAIEMENT_CHARGE_SINGLE_FCT, Q23_1_MONTANT_PAIEMENT_RECHARGE_NUM)
+
+paiement_moyen <- paiement %>% 
+  summarise(moyenne = mean(Q23_1_MONTANT_PAIEMENT_RECHARGE_NUM, na.rm = TRUE))
 
 ```
 
+le coût moyen payé par les ménages pour recharger le téléphone est de `r paiement_moyen[[1]]` Ariary.
 
 ]
 
 .panel[.panel-name[Utilisation de radio]
 ```{r echo=FALSE, message=FALSE, fig.height=4}
+
 
 
 ```
