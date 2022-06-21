@@ -1,0 +1,1118 @@
+---
+pagetitle: "Rapport d'étude"
+title: Village de Beanjavilo
+subtitle: 
+    - "Rapport Baseline"
+author: Barefoot College Madagascar
+date: "Mai 2022"
+location: 
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - libs/css/a11y-light.css
+      - libs/css/xaringan-rstudio.css
+      - libs/css/title-slide.css
+      - libs/css/toronto-data-workshop.css
+    seal: false
+    anchor_sections: false
+    self_contained: false
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      highlightLanguage: [r, latex, yaml, markdown, javascript, html]
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.retina = 3, 
+                      cache = FALSE,
+                      echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.show = TRUE,
+                      hiline = TRUE
+)
+options(htmltools.dir.version = FALSE)
+
+```
+
+
+```{r include=FALSE, warning=FALSE}
+
+# load packages
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(hms)
+library(hrbrthemes)
+library(viridis)
+library(kableExtra)
+library(mapview)
+library(sf)
+library(leaflet)
+library(plotly)
+
+```
+
+name: title
+class: top hide-count center
+layout: true
+
+<!-- Title Slide -->
+.talk-title[
+# `r rmarkdown::metadata$title`
+]
+
+<div class="talk-band left">
+<div class="talk-author f-zilla">`r rmarkdown::metadata$author`</div>
+<div class="talk-twitter code"></div>
+</div>
+<div class="talk-band right">
+<div class="code">`r paste(rmarkdown::metadata$location, collapse = ", ")`</div>
+<div class="code">`r paste(rmarkdown::metadata$date, collapse = ", ")`</div>
+</div>
+
+---
+
+## .pink.f-pompiere.absolute.w-100.left-0.animated.bounceInUp[Rapport Baseline]
+
+
+---
+layout: false
+class: center, middle
+
+# Résumé exécutif
+
+### Village de Beanjavilo
+
+```{r echo=FALSE, message=FALSE}
+
+data <- read.csv(here::here("data", "Beanjavilo", "baseline_beanjavilo.txt"), sep = ";", strip.white = TRUE, na.strings = c("", NA)) %>%   mutate(DATE = dmy(DATE))
+
+valueset <- read_excel(here::here("data", "disctionary_suivi.xlsx"), 4)
+
+focus <- read.csv(here::here("data", "Beanjavilo", "focus_beanjavilo.txt"), sep = ";", strip.white = TRUE, na.strings = c("", NA))
+
+# focus valueset list
+focus_valueset <- read_excel(here::here("data", "disctionary_focus.xlsx"), 2)
+
+focus_tidy <- focus_valueset %>% 
+  select(choix, correpondance) %>% 
+  split(focus_valueset$variable) %>% 
+  imap(function(x,y) x %>% rename_with(~paste(y), 1))
+# remplacer les valeurs de la colonne choix par celles de correspondance dans data
+valueset_list <- valueset %>% select(choix, correpondance) %>% 
+  split(valueset$variable)
+
+
+# Changer le nom de toutes les colonnes
+data_tidy_1 <- valueset_list %>% 
+  imap(function(x,y) x %>% rename_with(~paste(y), 1))
+
+# Début de réponse
+# data_merged <- data_tidy_1 %>% 
+#   map(left_join, data, by = character())
+
+data_roster <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q1_SOURCE_ECLAIRAGE_SINGLE_FCT_1:Q1_NOMBRE_JOURS_UTILISATION_PAR_NUM_5) %>% 
+  pivot_longer(-NUMERO_QUESTIONNAIRE, 
+               names_to =c(".value", "set"),
+               names_pattern = "(.+)_(.)",
+               values_drop_na = TRUE) 
+
+# traitement QCM
+
+data_qcm <- data %>%
+  select(NUMERO_QUESTIONNAIRE, ends_with("_MULT_FCT"))
+
+# creating a function for plotting bar chart
+
+bar_plot <- function(data, x){
+  ggplot(data, aes(x = fct_rev(fct_infreq({{x}})))) +
+  geom_bar(aes(y = ..count../sum(..count..)), fill = "steelblue") +
+  scale_y_continuous(labels=scales::percent) +
+  expand_limits(y = 1) +
+  geom_text(aes( label = scales::percent(..count../sum(..count..)),
+                   y= ..count../sum(..count..) ), stat= "count", hjust = -.04) +
+  coord_flip()
+}
+
+
+```
+
+---
+### Résumé exécutif
+```{r echo=FALSE, message=FALSE}
+
+
+```
+
+Résumé excecutif Beanjavilo ci-après
+
+---
+### Localisation
+
+```{r echo=FALSE, message=FALSE, fig.height=5, fig.width=10}
+
+cart <- read_excel(here::here("data","data_villages.xlsx"))
+
+
+cartesolaire <- cart %>% 
+  filter(`Année` == 2022)%>% 
+  select(-`Année`, -Statut) %>% 
+  mutate_if(is.numeric, funs(ifelse(is.na(.), 0, .))) %>% drop_na() 
+
+solaire <- as_tibble(cartesolaire)
+femme <- st_as_sf(solaire, coords = c("Longitude", "Latitude"), crs = 4326) 
+cartefemme<- mapview(femme,
+                     map.types = c("OpenStreetMap.DE"),
+                     zcol = c("Village"),
+                     legend = FALSE
+)
+cartefemme
+
+# femme %>% 
+# leaflet() %>% 
+#   addTiles() %>% 
+#   setView(lng = 47.321488, lat = -19.394923 , zoom = 5) %>% 
+#   addCircles(popup = femme$Village)
+
+
+  
+```
+
+
+
+---
+
+### Energie pour l'éclairage
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+
+```
+
+.panelset[
+.panel[.panel-name[Source d'énergie pour l'éclairage]
+
+```{r echo=FALSE, message = FALSE, fig.height=4}
+
+# Source d'éclairage
+
+source_eclairage <- data_roster %>% 
+  left_join(data_tidy_1$Q1_SOURCE_ECLAIRAGE_SINGLE_FCT) %>% 
+  mutate(Q1_SOURCE_ECLAIRAGE_SINGLE_FCT = as_factor(correpondance)) %>% 
+  select(-correpondance)
+theme_set(theme_light())
+
+source_eclairage_plot <- source_eclairage %>%
+  bar_plot(Q1_SOURCE_ECLAIRAGE_SINGLE_FCT) +
+  geom_text(aes( label = scales::percent(..count../sum(..count..)),
+                   y= ..count../sum(..count..) ), stat= "count", hjust = -.04) +
+  ggtitle("éclairage utilisé par les ménages") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+
+source_eclairage_plot
+
+# Type de lampe à pétrole
+type_lampe_petrole <- source_eclairage %>% 
+  left_join(data_tidy_1$Q2_TYPE_LAMPE_PETROLE_SINGLE_FCT) %>% 
+  mutate(Q2_TYPE_LAMPE_PETROLE_SINGLE_FCT = as_factor(correpondance)) %>% 
+  select(Q2_TYPE_LAMPE_PETROLE_SINGLE_FCT)
+
+source_eclairage_type <- source_eclairage$Q1_SOURCE_ECLAIRAGE_SINGLE_FCT %>% 
+  table
+
+
+# Utilisation par ménage
+nombre_source <- source_eclairage %>% 
+  group_by(NUMERO_QUESTIONNAIRE, Q1_SOURCE_ECLAIRAGE_SINGLE_FCT) %>% 
+  count() %>% 
+  pivot_wider(names_from = Q1_SOURCE_ECLAIRAGE_SINGLE_FCT,
+              values_from = n) %>%
+  mutate(nombre_source = sum(`Lampe pétrole`, `Torche électrique`, Autre, na.rm = TRUE))
+  
+
+# Comment interpréter ? 
+# Qu'est-ce qui est pertinent  de dire ?
+# Coût total de l'éclairage par ménage
+
+```
+
+- La **`r which.max(source_eclairage_type) %>% names`** est la source d'éclairage la plus utilisée par les ménages interviewés (**`r scales::percent(max(source_eclairage_type)/sum(source_eclairage_type))`**). 
+- La `r which.min(source_eclairage_type) %>% names` est la source d'éclairage la moins utilisée par les ménages interviewés (`r scales::percent(min(source_eclairage_type)/sum(source_eclairage_type))`).
+
+La majorité des ménages opte pour les lampes pétroles car elles sont les plus économiques et abordables et offrent en même temps un éclairage satisfaisant comparées aux autres sources d’éclairage.
+]
+
+.panel[.panel-name[Nombre de source d'éclairage par ménage]
+
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+nombre_source$nombre_source %>% table() %>% broom::tidy() %>%  
+  rename(`Nombre d'éclairage utilisé` = ".", 
+         `Nombre de ménages` = n) %>% 
+  kbl() %>%
+  kable_paper("hover", full_width = F)
+
+# nombre_source %>% 
+#   filter(nombre_source > 1)
+# 
+# nombre_source %>%
+#   filter(!is.na(`Torche électrique`)) %>% 
+#   kbl() %>%
+#   kable_paper("hover", full_width = F)
+
+```
+
+- Parmi les ménages interviewés, 25% utilisent deux types de sources d'éclairage. La plupart utilisent en même temps des lampes à pétrole et des torches électrique.
+]
+
+
+.panel[.panel-name[Dépenses des ménages pour l'éclairage]
+
+```{r echo=FALSE, message=FALSE, fig.height=5}
+# Coût mensuel
+cout_type <- source_eclairage %>% 
+  group_by(Q1_SOURCE_ECLAIRAGE_SINGLE_FCT)
+
+
+cout_type %>% 
+  ggplot(aes(x= Q1_SOURCE_ECLAIRAGE_SINGLE_FCT, y=Q1_COUT_MENSUEL_CONSOMMATION_NUM, fill= Q1_SOURCE_ECLAIRAGE_SINGLE_FCT)) +
+  geom_boxplot() +
+  geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("Dépense mensuelle par type d'éclairage") +
+    xlab("") +
+    ylab("Dépense mensuelle en Ariary")
+
+cout_type_table <- cout_type %>% 
+  summarise(`Dépense moyenne mensuelle` = mean(Q1_COUT_MENSUEL_CONSOMMATION_NUM, na.rm=TRUE)%>%  round(2)) %>% 
+  arrange(desc(`Dépense moyenne mensuelle`))
+
+
+# nombre de lampes
+# source_eclairage %>% 
+#   group_by(Q1_SOURCE_ECLAIRAGE_SINGLE_FCT) %>% 
+#   summarise(nombre = sum(Q1_NOMBRE_LAMPES_NUM))
+
+
+
+```
+
+- La source d'éclairage qui coûte la plus chère aux ménages est la *`r cout_type_table[[1,1]]`* avec une dépense moyenne mensuelle de **`r cout_type_table[[1,2]] %>% format(big.mark   = " ")`** Ariary par mois.
+
+]
+
+.panel[.panel-name[Durée d'utilisation des sources d'éclairage]
+
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+# Durée d'utilisation
+source_eclairage %>% 
+  group_by(Q1_SOURCE_ECLAIRAGE_SINGLE_FCT) %>% 
+  summarise(`durée d'utilisation moyenne journalière (hh:mm)` = mean(Q1_DUREE_UTILISATION_JOUR_NUM*60, na.rm=TRUE)%>%  round(2) %>% as_hms()) %>% 
+  arrange(desc(`durée d'utilisation moyenne journalière (hh:mm)`)) %>% 
+  mutate(`durée d'utilisation moyenne journalière (hh:mm)` = str_remove(`durée d'utilisation moyenne journalière (hh:mm)`,"00:")) %>% 
+  rename(`Source d'éclairage` = Q1_SOURCE_ECLAIRAGE_SINGLE_FCT) %>% 
+  kbl() %>%
+  kable_paper("hover", full_width = F)
+
+
+```
+
+]]
+
+---
+### Energie de cuisson
+
+.panelset[
+.panel[.panel-name[énergie de cuisson]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+cuisson <- data_qcm %>% 
+  select(NUMERO_QUESTIONNAIRE, Q3_ENERGIE_DE_CUISSON_MULT_FCT) %>% 
+  mutate(Q3_ENERGIE_DE_CUISSON_MULT_FCT = strsplit(Q3_ENERGIE_DE_CUISSON_MULT_FCT, "")) %>%
+  unnest(Q3_ENERGIE_DE_CUISSON_MULT_FCT) %>% 
+  left_join(data_tidy_1$Q3_ENERGIE_DE_CUISSON_MULT_FCT) %>% 
+  mutate(`énergie de cuisson` = correpondance) %>% 
+  select(-correpondance, -Q3_ENERGIE_DE_CUISSON_MULT_FCT)
+
+cuisson_plot <- cuisson %>%
+  bar_plot(`énergie de cuisson`) +
+  ggtitle("énergie de cuisson utilisée par les ménages") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+cuisson_plot 
+
+cuisson_table <- cuisson %>%
+  count(`énergie de cuisson`) %>% 
+  mutate(pourcentage =  round(n/sum(n), digits = 2)*100) %>% 
+  arrange(desc(pourcentage))
+
+# Par utilisation de source d'éclairage > Full_join
+
+# cuisson_source <- source_eclairage %>% 
+#   select(NUMERO_QUESTIONNAIRE, Q1_SOURCE_ECLAIRAGE_SINGLE_FCT) %>% 
+#   full_join(cuisson) 
+# 
+# cuisson_source_plot <- cuisson_source %>%
+#   ggplot(aes(x = Q1_SOURCE_ECLAIRAGE_SINGLE_FCT)) +
+#   geom_bar(aes(fill = `énergie de cuisson`))
+# 
+# cuisson_source_plot %>% ggplotly()
+
+```
+
+La source d'énergie de cuisson la plus utilisée est le **`r cuisson_table[[1,1]]`** (`r cuisson_table[[1,3]]`%).
+
+]
+.panel[.panel-name[emplacement cuisine]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+# Emplacement de la cuisine
+
+emplacement_cuisine <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q4_EMPLACEMENT_CUISINE_SINGLE_FCT) %>% 
+  left_join(data_tidy_1$Q4_EMPLACEMENT_CUISINE_SINGLE_FCT) %>% 
+  mutate(`emplacement cuisine` = correpondance) %>% 
+  select(-Q4_EMPLACEMENT_CUISINE_SINGLE_FCT, -correpondance)
+
+emplacement_cuisine_plot <- emplacement_cuisine %>% 
+  full_join(cuisson) 
+
+emplacement_cuisine_plot %>% 
+  ggplot(aes(x = `emplacement cuisine`)) +
+  geom_bar(aes(fill = `énergie de cuisson`), position = "dodge") +
+  labs(
+    y = NULL  )  +
+  ggtitle("croisement entre l'emplacement de la cuisine et le type d'énergie de cuisson utilisé")
+
+  
+
+```
+
+Etant donné que la grande majorité des cuisines sont à l'intérieur, il n'y a pas d'interprétation pertinente.
+
+]
+]
+
+
+---
+### Education des enfants
+
+.panelset[
+.panel[.panel-name[Nombre d'enfants]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+enfants <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, NOMBRE_ENFANTS_NUM) 
+
+enfants %>% 
+  ggplot(aes(NOMBRE_ENFANTS_NUM)) +
+  geom_bar(fill = "steelblue") +
+  scale_x_continuous(breaks = c(min(enfants$NOMBRE_ENFANTS_NUM):max(enfants$NOMBRE_ENFANTS_NUM))) +
+  labs(
+    x = "nombre d'enfants",
+    y = NULL  )  +
+  ggtitle("Nombre d'enfants par ménage")
+
+
+nombre_enfants <- enfants %>% 
+  summarise(moyenne = mean(NOMBRE_ENFANTS_NUM),
+            maximum = max(NOMBRE_ENFANTS_NUM),
+            mediane = median(NOMBRE_ENFANTS_NUM),
+            sd = sd(NOMBRE_ENFANTS_NUM) %>% round(2))
+
+
+```
+
+En  moyenne, le nombre d'enfants par ménage est  **`r nombre_enfants[[1]]`**. La médiane est de **`r nombre_enfants[[3]]`** enfants.
+
+
+]
+.panel[.panel-name[Taux de scolarisation des enfants]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+education <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q5_ENFANTS_VONT_A_L_ECOLE_SINGLE_FCT) %>% 
+  left_join(data_tidy_1$Q5_ENFANTS_VONT_A_L_ECOLE_SINGLE_FCT) %>% 
+  mutate(`scolarisation des enfants` = as.factor(correpondance)) %>% 
+  select(-Q5_ENFANTS_VONT_A_L_ECOLE_SINGLE_FCT, -correpondance)
+
+
+education_plot <- education %>% 
+  bar_plot(`scolarisation des enfants`) +
+  ggtitle("scolarisation des enfants") +
+  labs(
+    x = "est-ce que les enfants sont scolarisés",
+    y = "pourcentage"
+  ) 
+
+education_plot
+
+```
+
+
+
+]
+
+.panel[.panel-name[Heures d'étude]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+# Nombre d'heures d'étude
+heure_etude <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q6_N_H_LECTURE_OU_ETUDE_SINGLE_FCT) %>% 
+  left_join(data_tidy_1$Q6_N_H_LECTURE_OU_ETUDE_SINGLE_FCT) %>% 
+  mutate(`nombre d'heure d'étude` = correpondance) %>% 
+  select(-Q6_N_H_LECTURE_OU_ETUDE_SINGLE_FCT, -correpondance) %>% 
+  mutate(`nombre d'heure d'étude`  = ifelse(`nombre d'heure d'étude`=="Pas applicable", NA, `nombre d'heure d'étude`)) %>% 
+  na.omit()
+
+heure_etude %>% 
+  bar_plot(`nombre d'heure d'étude`)+
+  ggtitle("nombre d'heures d'étude") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  )
+
+```
+
+
+]
+.panel[.panel-name[moment étude]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+# Nombre d'heures d'étude
+moment_etude <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q7_MOMENT_DEVOIRS_SINGLE_FCT) %>%
+  mutate(Q7_MOMENT_DEVOIRS_SINGLE_FCT = strsplit(Q7_MOMENT_DEVOIRS_SINGLE_FCT, "")) %>%
+  unnest(Q7_MOMENT_DEVOIRS_SINGLE_FCT) %>%
+  left_join(data_tidy_1$Q7_MOMENT_DEVOIRS_SINGLE_FCT) %>% 
+  mutate(`moment de la journée étude` = correpondance) %>% 
+  select(-Q7_MOMENT_DEVOIRS_SINGLE_FCT, -correpondance) %>% 
+  mutate(`moment de la journée étude`   = ifelse(`moment de la journée étude` =="Pas applicable", NA, `moment de la journée étude` )) %>% 
+  na.omit()
+
+moment_etude %>% 
+  bar_plot(`moment de la journée étude`)+
+  ggtitle("Moment de la journée pour l'étude") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  )
+
+# Moment de la journée pour étude et durée
+moment_heure <- moment_etude %>% 
+  full_join(heure_etude) %>% 
+  na.omit()
+
+moment_heure %>% 
+  ggplot(aes(x = `moment de la journée étude`)) +
+  geom_bar(aes(fill = `nombre d'heure d'étude`), position = "dodge") +
+  ggtitle("Moment de la journée pour l'étude") +
+  labs(
+    x = NULL,
+    y = NULL
+  )
+
+moment_etude_tbl <- moment_etude %>% 
+  count(`moment de la journée étude`, sort = TRUE)
+
+heure_etude_tbl <- heure_etude %>%
+  group_by(`nombre d'heure d'étude`) %>% 
+  count(sort = TRUE)
+
+
+
+```
+
+Les enfants étudient surtout le **`r moment_etude_tbl[[1,1]]`** (*`r (moment_etude_tbl[[1,2]]/colSums(moment_etude_tbl[2])) %>% scales::percent()`*) avec une majorité (*`r (heure_etude_tbl[[1,2]]/colSums(heure_etude_tbl[2])) %>% scales::percent()`*) qui étudie **`r heure_etude_tbl[[1,1]]`**.
+
+]
+]
+
+---
+### Eclairage dans les activités quotidiennes
+
+.panelset[
+
+.panel[.panel-name[éclairage pour les études]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+satisfaction <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q8_ECLAIRAGE_ETUDE_SUFFISANT_SINGLE_FCT) %>% 
+  left_join(data_tidy_1$Q8_ECLAIRAGE_ETUDE_SUFFISANT_SINGLE_FCT) %>% 
+  mutate(`satisfaction par rapport à l'éclairage pour l'étude` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>% 
+  select(-Q8_ECLAIRAGE_ETUDE_SUFFISANT_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+satisfaction_tbl <- satisfaction %>% 
+  count(`satisfaction par rapport à l'éclairage pour l'étude`, sort = TRUE) %>%
+  mutate(n = (n/sum(n)) %>% scales::percent()) 
+
+satisfaction_tbl %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+
+
+```
+
+La majorité des ménages enquêtés (*`r satisfaction_tbl[[1,2]]`*) se déclarent **`r ifelse(satisfaction_tbl[[1,1]]=="Non", "non satisfaits", "satisfaits")`** de leur éclairage pour étudier.
+
+]
+
+.panel[.panel-name[éclairage dans la vie quotidienne]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+satisfaction_quotidien <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q9_ECLAIRAGE_SUFFISANT_ACTIVITE_SINGLE_FCT) %>%
+  mutate(Q9_ECLAIRAGE_SUFFISANT_ACTIVITE_SINGLE_FCT = as.character(Q9_ECLAIRAGE_SUFFISANT_ACTIVITE_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q9_ECLAIRAGE_SUFFISANT_ACTIVITE_SINGLE_FCT) %>% 
+  mutate(`satisfaction pour les activités quotidiennes` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>% 
+  select(-Q9_ECLAIRAGE_SUFFISANT_ACTIVITE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+satisfaction_quotidien_tbl <- satisfaction_quotidien %>% 
+  count(`satisfaction pour les activités quotidiennes`, sort = TRUE) %>%
+  mutate(n = (n/sum(n)) %>% scales::percent()) 
+
+satisfaction_quotidien_tbl %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+```
+
+La majorité des ménages enquêtés (*`r satisfaction_quotidien_tbl[[1,2]]`*) se déclarent **`r ifelse(satisfaction_quotidien_tbl[[1,1]]=="Non", "non satisfaits", "satisfaits")`** de leur éclairage pour étudier.
+]
+]
+
+---
+
+### AGR des femmes
+
+.panelset[
+
+.panel[.panel-name[participation des femmes aux AGR]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+participation_agr <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q10_PARTICIPATION_FEMMES_AUX_AGR_SINGLE_FCT:Q10_2_REVENU_AGR_PAR_MOIS_NUM) %>%
+  mutate(Q10_PARTICIPATION_FEMMES_AUX_AGR_SINGLE_FCT = as.character(Q10_PARTICIPATION_FEMMES_AUX_AGR_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q10_PARTICIPATION_FEMMES_AUX_AGR_SINGLE_FCT) %>% 
+  mutate(`participation des femmes aux AGR` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>% 
+  select(-Q10_PARTICIPATION_FEMMES_AUX_AGR_SINGLE_FCT, -correpondance)
+
+participation_agr_tbl <- participation_agr %>% 
+  count(`participation des femmes aux AGR`, sort = TRUE) %>% 
+  mutate(n = (n/sum(n)) %>% scales::percent()) 
+
+participation_agr_tbl %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+
+```
+
+La majorité des femmes (*`r participation_agr_tbl[[1,2]]`*)  **`r ifelse(participation_agr_tbl[[1,1]]=="Non", "participent", "ne participent pas")`** aux revenus du ménage.
+
+]
+
+.panel[.panel-name[activité des femmes]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+agr_femmes <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q11_TYPE_D_ACTIVITE_MULT_FCT) %>%
+  mutate(Q11_TYPE_D_ACTIVITE_MULT_FCT = strsplit(Q11_TYPE_D_ACTIVITE_MULT_FCT,"")) %>% 
+  unnest(Q11_TYPE_D_ACTIVITE_MULT_FCT) %>% 
+  left_join(data_tidy_1$Q11_TYPE_D_ACTIVITE_MULT_FCT) %>% 
+  mutate(`activité des femmes` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q11_TYPE_D_ACTIVITE_MULT_FCT, -correpondance) %>% 
+  na.omit()
+
+agr_femmes_tbl <- agr_femmes %>% 
+  group_by(`activité des femmes`) %>% 
+  count(sort = TRUE) 
+
+agr_femmes %>% 
+  bar_plot(`activité des femmes`) +
+  ggtitle("AGR des femmes") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+
+```
+
+L'activité qui pourrait générer un revenu et qui susceptible d'être le plus pratiqué par les femmes est la **`r agr_femmes_tbl[[1,1]]`**.
+
+]
+]
+
+---
+### Situation de la santé
+
+.panelset[
+
+.panel[.panel-name[Fumée noire]
+```{r echo=FALSE, message=FALSE, fig.height=3}
+
+fumee_noire <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q12_FUMEE_NOIR_ECLAIRAGE_SINGLE_FCT)  %>%
+  mutate(Q12_FUMEE_NOIR_ECLAIRAGE_SINGLE_FCT = as.character(Q12_FUMEE_NOIR_ECLAIRAGE_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q12_FUMEE_NOIR_ECLAIRAGE_SINGLE_FCT) %>% 
+  mutate(`fumée noire` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q12_FUMEE_NOIR_ECLAIRAGE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+fumee_noire %>%
+  bar_plot(`fumée noire`) +
+  ggtitle("existence de fumée noire pour l'éclairage") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  )
+
+count_fumee_noire <- fumee_noire %>% 
+  group_by(`fumée noire`) %>% 
+  count(sort = TRUE) 
+
+
+incendie <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q14_CAS_INCENDIE_BRULURE_SINGLE_FCT)  %>%
+  mutate(Q14_CAS_INCENDIE_BRULURE_SINGLE_FCT = as.character(Q14_CAS_INCENDIE_BRULURE_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q14_CAS_INCENDIE_BRULURE_SINGLE_FCT) %>% 
+  mutate(`incendie` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q14_CAS_INCENDIE_BRULURE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+cas_incendie <- incendie %>% 
+  group_by(incendie) %>% 
+  count(incendie)
+
+
+```
+
+**`r ((count_fumee_noire$n/sum(count_fumee_noire$n)) %>% scales::percent())[1]`** des interviewés déclarent que l'éclairage qu'ils utilisent fait ressortir de la fumée noire.
+`r ifelse(any(cas_incendie$incendie == "Oui"), "Il y a eu des cas d'incendie causé par l'utilisation de l'éclairage", "Il n'y a pas eu de cas d'incendie causé par l'utilisation de l'éclairage")` parmi les interviewés.
+
+]
+.panel[.panel-name[problèmes de santé]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+sante <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q13_PROBLEME_DE_SANTE_MULT_FCT) %>%
+  mutate(Q13_PROBLEME_DE_SANTE_MULT_FCT = strsplit(Q13_PROBLEME_DE_SANTE_MULT_FCT,"")) %>% 
+  unnest(Q13_PROBLEME_DE_SANTE_MULT_FCT) %>% 
+  left_join(data_tidy_1$Q13_PROBLEME_DE_SANTE_MULT_FCT) %>% 
+  mutate(`problèmes de santé` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q13_PROBLEME_DE_SANTE_MULT_FCT, -correpondance) %>% 
+  na.omit()
+
+sante_tbl <- sante %>% 
+  group_by(`problèmes de santé`) %>% 
+  count(sort = TRUE) 
+
+sante %>% 
+  bar_plot(`problèmes de santé`) +
+  ggtitle("problèmes de santé") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+autre_probleme <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q13_J_AUTRE_PROBLEME_SANTE_CHR) %>% 
+  na.omit()
+
+
+```
+
+Le problème de santé le prévalent selon les interviewés est le **`r sante_tbl[1,1]`**(`r ((sante_tbl$n/sum(sante_tbl$n)) %>% scales::percent())[1]`). 
+
+
+Voici les autres maladies citées par les interviewés : `r paste(autre_probleme$Q13_J_AUTRE_PROBLEME_SANTE_CHR, collapse = ", ")`.
+
+]
+]
+
+---
+### Emancipation des femmes
+
+.panelset[
+
+.panel[.panel-name[Femmes disposant d'un compte bancaire]
+```{r echo=FALSE, message=FALSE, fig.height=3}
+
+compte_bancaire <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q15_FEMME_AYANT_COMPTE_BANCAIRE_SINGLE_FCT)  %>%
+  mutate(Q15_FEMME_AYANT_COMPTE_BANCAIRE_SINGLE_FCT = as.character(Q15_FEMME_AYANT_COMPTE_BANCAIRE_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q15_FEMME_AYANT_COMPTE_BANCAIRE_SINGLE_FCT) %>% 
+  mutate(`femmes disposant d'un compte bancaire` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q15_FEMME_AYANT_COMPTE_BANCAIRE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+compte_bancaire %>%
+  bar_plot(`femmes disposant d'un compte bancaire`) +
+  ggtitle("femmes disposant d'un compte bancaire") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  )
+
+count_compte_bancaire <- compte_bancaire %>% 
+  group_by(`femmes disposant d'un compte bancaire`) %>% 
+  count(sort = TRUE) 
+
+percent_compte <- count_compte_bancaire %>% 
+  filter(`femmes disposant d'un compte bancaire`=="Non")
+
+
+```
+
+**`r (percent_compte[[2]]/nrow(compte_bancaire)) %>% scales::percent()`** des enquêtés déclarent que les femmes ne disposent pas de compte bancaire.
+
+]
+.panel[.panel-name[sécurité la nuit]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+securite <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q16_FEMME_EN_SECURITE_LA_NUIT_SINGLE_FCT)  %>%
+  mutate(Q16_FEMME_EN_SECURITE_LA_NUIT_SINGLE_FCT = as.character(Q16_FEMME_EN_SECURITE_LA_NUIT_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$Q16_FEMME_EN_SECURITE_LA_NUIT_SINGLE_FCT) %>% 
+  mutate(`femmes en sécurité  la nuit` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q16_FEMME_EN_SECURITE_LA_NUIT_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+securite %>%
+  bar_plot(`femmes en sécurité  la nuit`) +
+  ggtitle("femmes se sentent en sécurité la nuit") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  )
+
+securite_tbl <- securite %>% 
+  group_by(`femmes en sécurité  la nuit`) %>% 
+  count(sort = TRUE) 
+
+percent_securite <- securite_tbl %>% 
+  filter(`femmes en sécurité  la nuit`=="Non")
+
+```
+
+**`r  (percent_securite[[2]]/nrow(securite)) %>%  scales::percent()`** des enquêtés déclarent que les femmes ne se sentent pas en sécurité la nuit.
+
+]
+
+.panel[.panel-name[participation dans les associations]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+participation_assoc <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q17_PARTICIPATION_FEMMES_ASSOC_MULT_FCT) %>%
+  unnest(Q17_PARTICIPATION_FEMMES_ASSOC_MULT_FCT) %>% 
+  left_join(data_tidy_1$Q17_PARTICIPATION_FEMMES_ASSOC_MULT_FCT) %>% 
+  mutate(`participation des femmes dans les associations` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q17_PARTICIPATION_FEMMES_ASSOC_MULT_FCT, -correpondance) %>% 
+  na.omit()
+
+assoc_tbl <- participation_assoc %>% 
+  group_by(`participation des femmes dans les associations`) %>% 
+  count(sort = TRUE) 
+
+participation_assoc %>% 
+  bar_plot(`participation des femmes dans les associations`) +
+  ggtitle("participation des femmes dans les associations") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+```
+
+
+]
+
+.panel[.panel-name[décision dans le ménage]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+decision <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q20_PRISE_DECISION_DEPENSES_SINGLE_FCT) %>%
+  left_join(data_tidy_1$Q20_PRISE_DECISION_DEPENSES_SINGLE_FCT) %>% 
+  mutate(`prise de décision dans le ménage` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q20_PRISE_DECISION_DEPENSES_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+
+decision_tbl <- decision %>% 
+  group_by(`prise de décision dans le ménage`) %>% 
+  count(sort = TRUE) 
+
+decision %>% 
+  bar_plot(`prise de décision dans le ménage`) +
+  ggtitle("prise de décision dans le ménage") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+decision_percent <- decision_tbl %>% 
+  mutate(percent = n/nrow(decision))
+
+```
+
+Dans le ménage, la prise de décision se fait par **`r decision_percent[[1,1]]`(`r decision_percent[[1,3]] %>% scales::percent()`)**.
+
+]
+
+
+]
+
+---
+### Utilisation des téléphones
+
+.panelset[
+
+.panel[.panel-name[Utilisation des téléphones]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+# téléphone par ménage
+telephone <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM) %>% 
+  mutate(Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM = as.character(Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM))
+
+telephone %>% 
+  bar_plot(Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM) +
+  ggtitle("Nombre de téléphones détenu dans le ménage") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+telephone_percent <- telephone %>% 
+  group_by(Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM) %>% 
+  count() %>% 
+  mutate(percent = (n/nrow(telephone)) %>% scales::percent())
+
+
+un_phone <- telephone %>%
+  mutate(nombre = case_when(
+    Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM > 0 ~ "au moins un téléphone",
+    TRUE ~ Q21_COMBIEN_DE_TELEPHONE_PORTABLE_NUM
+  )) %>% 
+  group_by(nombre) %>% 
+  count() %>% 
+  mutate(percent = (n/nrow(telephone)) %>% scales::percent()) %>% 
+  filter(nombre == "au moins un téléphone")
+  
+
+```
+
+**`r un_phone[[1,3]]`** des ménages interviewés possèdent au moins un téléphone.
+
+]
+.panel[.panel-name[Charge du téléphone]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+charge_phone <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q22_LIEU_DE_CHARGE_TELEPHONE_SINGLE_FCT) %>% 
+  left_join(data_tidy_1$Q22_LIEU_DE_CHARGE_TELEPHONE_SINGLE_FCT) %>% 
+  mutate(`lieu de charge du téléphone` = ifelse(correpondance == "Autre", NA, correpondance)) %>%
+  select(-Q22_LIEU_DE_CHARGE_TELEPHONE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+  
+
+charge_phone %>% 
+  bar_plot(`lieu de charge du téléphone`) +
+  ggtitle("`lieu de charge du téléphone`") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  ) 
+
+autre_charge <- data %>% 
+  select(Q22_D_AUTRE_LIEU_DE_CHARGE_CHR)
+
+paiement <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, Q23_PAIEMENT_CHARGE_SINGLE_FCT, Q23_1_MONTANT_PAIEMENT_RECHARGE_NUM)
+
+paiement_moyen <- paiement %>% 
+  summarise(moyenne = mean(Q23_1_MONTANT_PAIEMENT_RECHARGE_NUM, na.rm = TRUE))
+
+```
+
+Le coût moyen payé par les ménages pour recharger le téléphone est de `r paiement_moyen[[1]]` Ariary.
+
+]
+
+.panel[.panel-name[Utilisation de radio]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+
+
+```
+
+
+]
+]
+
+
+---
+class: center, middle
+
+# Description de l'échantillon
+
+---
+### description de l'échantillon
+
+```{r echo=FALSE, fig.height=3, message = FALSE}
+
+sexe <- data %>% 
+  select(NUMERO_QUESTIONNAIRE, SEXE_SINGLE_FCT) %>%
+  mutate(SEXE_SINGLE_FCT = as.character(SEXE_SINGLE_FCT)) %>% 
+  left_join(data_tidy_1$SEXE_SINGLE_FCT) %>% 
+  mutate(SEXE_SINGLE_FCT = correpondance) %>% 
+  select(-correpondance)
+
+
+sexe %>% 
+  bar_plot(SEXE_SINGLE_FCT) +
+  ggtitle("Sexe des enquêtés") +
+  labs(
+    x = NULL,
+    y = "pourcentage"
+  )
+
+
+```
+
+
+---
+class: center, middle
+
+# Résultats du focus group
+
+---
+
+### Résultats principaux
+
+.panelset[
+
+.panel[.panel-name[infrastructures]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+infrastructure <- focus %>%
+  select(FOCUS_GROUP_ID, Q1_INFRASTRUCTURE_SINGLE_FCT_1:Q1_INFRASTRUCTURE_SINGLE_FCT_8) %>% 
+  pivot_longer(-FOCUS_GROUP_ID, 
+               names_to =c(".value", "set"),
+               names_pattern = "(.+)_(.)",
+               values_drop_na = TRUE) %>% 
+  left_join(focus_tidy$Q1_INFRASTRUCTURE_SINGLE_FCT) %>% 
+  mutate(`infrastructure présente` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q1_INFRASTRUCTURE_SINGLE_FCT, -correpondance, -set) %>% 
+  na.omit()
+
+infrastructure %>% 
+  distinct(`infrastructure présente`) %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+```
+
+
+]
+.panel[.panel-name[Groupes existant dans le village]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+groupe <- focus %>% 
+  select(FOCUS_GROUP_ID, Q1_GROUP_TYPE_MULT_FCT) %>%
+  mutate(Q1_GROUP_TYPE_MULT_FCT = strsplit(Q1_GROUP_TYPE_MULT_FCT,"")) %>% 
+  unnest(Q1_GROUP_TYPE_MULT_FCT) %>%
+  left_join(focus_tidy$Q1_GROUP_TYPE_MULT_FCT) %>% 
+  mutate(`groupes existants dans le village` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q1_GROUP_TYPE_MULT_FCT, -correpondance) %>% 
+  na.omit()
+
+
+groupe %>% 
+  distinct(`groupes existants dans le village`) %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+```
+
+
+
+]
+
+.panel[.panel-name[Source d'eau]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+# source <- focus %>% 
+#   select(FOCUS_GROUP_ID, Q2_WATER_SOURCE_SINGLE_FCT_1:Q2_WATER_SOURCE_SINGLE_FCT_5) %>% 
+#   pivot_longer(-FOCUS_GROUP_ID, 
+#                names_to =c(".value", "set"),
+#                names_pattern = "(.+)_(.)",
+#                values_drop_na = TRUE) %>% 
+#   left_join(focus_tidy$Q2_WATER_SOURCE_SINGLE_FCT) %>% 
+#   mutate(`source d'eau présente` = ifelse(correpondance == "Autre", NA, correpondance)) %>%
+#   select(-Q2_WATER_SOURCE_SINGLE_FCT, -correpondance, -set) %>% 
+#   na.omit()
+# 
+# autre_source <- focus %>% 
+#   select(FOCUS_GROUP_ID, Q2_E_OTHER_WATER_SOURCE_CHR_1:Q2_E_OTHER_WATER_SOURCE_CHR_5) %>% 
+#   pivot_longer(-FOCUS_GROUP_ID, 
+#                names_to =c(".value", "set"),
+#                names_pattern = "(.+)_(.)",
+#                values_drop_na = TRUE) %>% 
+#   mutate(`source d'eau présente` = Q2_E_OTHER_WATER_SOURCE_CHR) %>% 
+#   select(-Q2_E_OTHER_WATER_SOURCE_CHR, -set)
+# 
+# eau <- bind_rows(source, autre_source)
+# 
+# eau %>% 
+#   distinct(`source d'eau présente`) %>% 
+#   kbl() %>% 
+#   kable_paper("hover", full_width = F)
+
+```
+
+
+]
+
+.panel[.panel-name[livelihood]
+```{r echo=FALSE, message=FALSE, fig.height=4}
+
+livelihood <- focus %>% 
+  select(FOCUS_GROUP_ID, Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT) %>% 
+  mutate(Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT = strsplit(Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT,"")) %>% 
+  unnest(Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT) %>% 
+  left_join(focus_tidy$Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT) %>% 
+  mutate(`activités économiques principales` = ifelse(correpondance == "Pas applicable", NA, correpondance)) %>%
+  select(-Q4_MAIN_OCCUPATION_OF_THE_VILLAGE_SINGLE_FCT, -correpondance) %>% 
+  na.omit()
+  
+
+livelihood %>% 
+  distinct(`activités économiques principales`) %>% 
+  kbl() %>% 
+  kable_paper("hover", full_width = F)
+
+
+```
+
+
+]
+]
+
+

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Rapport d’étude</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Barefoot College Madagascar" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="libs/jquery/jquery.min.js"></script>
+    <link href="libs/leaflet/leaflet.css" rel="stylesheet" />
+    <script src="libs/leaflet/leaflet.js"></script>
+    <link href="libs/leafletfix/leafletfix.css" rel="stylesheet" />
+    <script src="libs/proj4/proj4.min.js"></script>
+    <script src="libs/Proj4Leaflet/proj4leaflet.js"></script>
+    <link href="libs/rstudio_leaflet/rstudio_leaflet.css" rel="stylesheet" />
+    <script src="libs/leaflet-binding/leaflet.js"></script>
+    <script src="libs/leaflet-providers/leaflet-providers_1.9.0.js"></script>
+    <script src="libs/leaflet-providers-plugin/leaflet-providers-plugin.js"></script>
+    <link href="libs/HomeButton/home-button.css" rel="stylesheet" />
+    <script src="libs/HomeButton/home-button.js"></script>
+    <script src="libs/HomeButton/easy-button-src.min.js"></script>
+    <script src="libs/clipboard/setClipboardText.js"></script>
+    <link href="libs/mapviewCSS/mapview-popup.css" rel="stylesheet" />
+    <link href="libs/mapviewCSS/mapview.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/css/a11y-light.css" type="text/css" />
+    <link rel="stylesheet" href="libs/css/xaringan-rstudio.css" type="text/css" />
+    <link rel="stylesheet" href="libs/css/title-slide.css" type="text/css" />
+    <link rel="stylesheet" href="libs/css/toronto-data-workshop.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+name: title
+class: top hide-count center
+layout: true
+
+&lt;!-- Title Slide --&gt;
+.talk-title[
+# Village d'Ambatomainty
+]
+
+&lt;div class="talk-band left"&gt;
+&lt;div class="talk-author f-zilla"&gt;Barefoot College Madagascar&lt;/div&gt;
+&lt;div class="talk-twitter code"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="talk-band right"&gt;
+&lt;div class="code"&gt;&lt;/div&gt;
+&lt;div class="code"&gt;Mai 2022&lt;/div&gt;
+&lt;/div&gt;
+
+---
+
+## .pink.f-pompiere.absolute.w-100.left-0.animated.bounceInUp[Rapport Baseline]
+
+
+---
+layout: false
+class: center, middle
+
+# Résumé exécutif
+
+### Village d'Ambatomainty
+
+
+
+---
+### Résumé exécutif
+
+
+Résumé excecutif ambatomainty ci-après
+
+---
+### Localisation
+
+<div id="htmlwidget-5299e76a66792dce7e86" style="width:720px;height:360px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5299e76a66792dce7e86">{"x":{"options":{"minZoom":1,"maxZoom":52,"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"preferCanvas":false,"bounceAtZoomLimits":false,"maxBounds":[[[-90,-370]],[[90,370]]]},"calls":[{"method":"addProviderTiles","args":["OpenStreetMap.DE","OpenStreetMap.DE","OpenStreetMap.DE",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"createMapPane","args":["point",440]},{"method":"addCircleMarkers","args":[[-20.358813,-22.582158,-14.349858,-19.549944,-24.487361,-20.651,-23.559033,-23.5018138889,-13.389163,-13.409661,-19.394923,-18.9541805556,-18.7781078064,-15.76618,-20.1807916667,-13.0414555556,-21.20801,-21.30339],[47.320859,47.279658,49.430089,44.390922,44.227694,44.05,44.318881,44.1727944444,48.340355,48.355,47.321488,44.2351694444,44.3359736033,50.00007,44.3500416667,48.8572861111,47.49886,47.46983],6,null,"femme - Village",{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"pane":"point","stroke":true,"color":"#333333","weight":1,"opacity":[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9],"fill":true,"fillColor":["#009497","#B7DD3A","#006590","#481864","#DCE12C","#412E72","#8FD64E","#00A293","#32417E","#007596","#412E72","#008598","#61CF62","#00BB81","#00AF8B","#055389","#B7DD3A","#0FC573"],"fillOpacity":[0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6]},null,null,["<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>1&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Iavomanitra&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Amoron'I Mania&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>4&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>286&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td> 80&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>2&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Tsaratanana&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Atsimo Atsinanana&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>3&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>150&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td> 50&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>3&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Andranomilolo&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Sava&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>4&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>155&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>100&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>4&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Ambakivao&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Menabe&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>4&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>200&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>150&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>5&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Vorojà&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Atsimo Andrefana&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>4&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>175&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td> 50&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>6&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Ambararata&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Menabe&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>4&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>181&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>  0&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>7&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Ranomay&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Atsimo Andrefana&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>4&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>178&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td> 50&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>8&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Ifanato&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Atsimo Andrefana&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>4&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>200&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td> 50&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>9&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Ampasimpohy&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Diana&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>2&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td> 78&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>  0&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>10&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Antafondro&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Diana&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>2&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>104&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>  0&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>11&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Ambatomainty&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Vakinankaratra&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>3&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>182&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>  0&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>12&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Beanjavilo&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Melaky&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>4&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>200&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>  0&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>13&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Mokotibe&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Melaky&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>4&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>200&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>  0&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>14&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Marofototra&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Analanjirofo&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>4&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>147&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>  0&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>15&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Kivalo&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Menabe&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>4&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>200&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>  0&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>16&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Andavoanemboka&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Diana&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>3&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>150&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>  0&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>17&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Torotosy&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Vatovavy Fitovinany&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>2&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>100&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>  0&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>","<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>18&emsp;<\/td><\/tr><tr><td>1<\/td><th>Village&emsp;<\/th><td>Menarano&emsp;<\/td><\/tr><tr><td>2<\/td><th>District&emsp;<\/th><td>Vatovavy Fitovinany&emsp;<\/td><\/tr><tr><td>3<\/td><th>Nombre de FIS&emsp;<\/th><td>2&emsp;<\/td><\/tr><tr><td>4<\/td><th>Nombre de ménages bénéficiaires&emsp;<\/th><td>100&emsp;<\/td><\/tr><tr><td>5<\/td><th>bénéficiaires de l'entrepreneuriat solaire&emsp;<\/th><td>  0&emsp;<\/td><\/tr><tr><td>6<\/td><th>geometry&emsp;<\/th><td>sfc_POINT&emsp;<\/td><\/tr><\/table><\/div>"],{"maxWidth":800,"minWidth":50,"autoPan":true,"keepInView":false,"closeButton":true,"closeOnClick":true,"className":""},["Iavomanitra","Tsaratanana","Andranomilolo","Ambakivao","Vorojà","Ambararata","Ranomay","Ifanato","Ampasimpohy","Antafondro","Ambatomainty","Beanjavilo","Mokotibe","Marofototra","Kivalo","Andavoanemboka","Torotosy","Menarano"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addScaleBar","args":[{"maxWidth":100,"metric":true,"imperial":true,"updateWhenIdle":true,"position":"bottomleft"}]},{"method":"addHomeButton","args":[44.05,-24.487361,50.00007,-13.0414555556,true,"femme - Village","Zoom to femme - Village","<strong> femme - Village <\/strong>","bottomright"]},{"method":"addLayersControl","args":["OpenStreetMap.DE","femme - Village",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[-24.487361,-13.0414555556],"lng":[44.05,50.00007]},"fitBounds":[-24.487361,44.05,-13.0414555556,50.00007,[]]},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  return (\n      function(el, x, data) {\n      // get the leaflet map\n      var map = this; //HTMLWidgets.find('#' + el.id);\n      // we need a new div element because we have to handle\n      // the mouseover output separately\n      // debugger;\n      function addElement () {\n      // generate new div Element\n      var newDiv = $(document.createElement('div'));\n      // append at end of leaflet htmlwidget container\n      $(el).append(newDiv);\n      //provide ID and style\n      newDiv.addClass('lnlt');\n      newDiv.css({\n      'position': 'relative',\n      'bottomleft':  '0px',\n      'background-color': 'rgba(255, 255, 255, 0.7)',\n      'box-shadow': '0 0 2px #bbb',\n      'background-clip': 'padding-box',\n      'margin': '0',\n      'padding-left': '5px',\n      'color': '#333',\n      'font': '9px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif',\n      'z-index': '700',\n      });\n      return newDiv;\n      }\n\n\n      // check for already existing lnlt class to not duplicate\n      var lnlt = $(el).find('.lnlt');\n\n      if(!lnlt.length) {\n      lnlt = addElement();\n\n      // grab the special div we generated in the beginning\n      // and put the mousmove output there\n\n      map.on('mousemove', function (e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                           ' lon: ' + (e.latlng.lng).toFixed(5) +\n                           ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                           ' | zoom: ' + map.getZoom() +\n                           ' | x: ' + L.CRS.EPSG3857.project(e.latlng).x.toFixed(0) +\n                           ' | y: ' + L.CRS.EPSG3857.project(e.latlng).y.toFixed(0) +\n                           ' | epsg: 3857 ' +\n                           ' | proj4: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs ');\n      } else {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      }\n      });\n\n      // remove the lnlt div when mouse leaves map\n      map.on('mouseout', function (e) {\n      var strip = document.querySelector('.lnlt');\n      if( strip !==null) strip.remove();\n      });\n\n      };\n\n      //$(el).keypress(67, function(e) {\n      map.on('preclick', function(e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      var txt = document.querySelector('.lnlt').textContent;\n      console.log(txt);\n      //txt.innerText.focus();\n      //txt.select();\n      setClipboardText('\"' + txt + '\"');\n      }\n      });\n\n      }\n      ).call(this.getMap(), el, x, data);\n}","data":null},{"code":"function(el, x, data) {\n  return (function(el,x,data){\n           var map = this;\n\n           map.on('keypress', function(e) {\n               console.log(e.originalEvent.code);\n               var key = e.originalEvent.code;\n               if (key === 'KeyE') {\n                   var bb = this.getBounds();\n                   var txt = JSON.stringify(bb);\n                   console.log(txt);\n\n                   setClipboardText('\\'' + txt + '\\'');\n               }\n           })\n        }).call(this.getMap(), el, x, data);\n}","data":null}]}}</script>
+
+
+
+---
+
+### Energie pour l'éclairage
+
+
+
+.panelset[
+.panel[.panel-name[Source d'énergie pour l'éclairage]
+
+&lt;img src="index_files/figure-html/unnamed-chunk-5-1.png" width="504" /&gt;
+
+- La **Torche électrique** est la source d'éclairage la plus utilisée par les ménages interviewés (**71%**). 
+- La Autre est la source d'éclairage la moins utilisée par les ménages interviewés (10%).
+
+La majorité des ménages opte pour les lampes pétroles car elles sont les plus économiques et abordables et offrent en même temps un éclairage satisfaisant comparées aux autres sources d’éclairage.
+]
+
+.panel[.panel-name[Nombre de source d'éclairage par ménage]
+
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Nombre d'éclairage utilisé &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Nombre de ménages &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 32 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Parmi les ménages interviewés, 25% utilisent deux types de sources d'éclairage. La plupart utilisent en même temps des lampes à pétrole et des torches électrique.
+]
+
+
+.panel[.panel-name[Dépenses des ménages pour l'éclairage]
+
+&lt;img src="index_files/figure-html/unnamed-chunk-7-1.png" width="504" /&gt;
+
+- La source d'éclairage qui coûte la plus chère aux ménages est la *Torche électrique* avec une dépense moyenne mensuelle de **4 067.65** Ariary par mois.
+
+]
+
+.panel[.panel-name[Durée d'utilisation des sources d'éclairage]
+
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Source d'éclairage &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; durée d'utilisation moyenne journalière (hh:mm) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Autre &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 03:48.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Torche électrique &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 02:45.88 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Lampe pétrole &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 01:33.33 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]]
+
+---
+### Energie de cuisson
+
+.panelset[
+.panel[.panel-name[énergie de cuisson]
+&lt;img src="index_files/figure-html/unnamed-chunk-9-1.png" width="504" /&gt;
+
+La source d'énergie de cuisson la plus utilisée est le **Bois** (92%).
+
+]
+.panel[.panel-name[emplacement cuisine]
+&lt;img src="index_files/figure-html/unnamed-chunk-10-1.png" width="504" /&gt;
+
+Etant donné que la grande majorité des cuisines sont à l'intérieur, il n'y a pas d'interprétation pertinente.
+
+]
+]
+
+
+---
+### Education des enfants
+
+.panelset[
+.panel[.panel-name[Nombre d'enfants]
+&lt;img src="index_files/figure-html/unnamed-chunk-11-1.png" width="504" /&gt;
+
+En  moyenne, le nombre d'enfants par ménage est  **4.125**. La médiane est de **3.5** enfants.
+
+
+]
+.panel[.panel-name[Taux de scolarisation des enfants]
+&lt;img src="index_files/figure-html/unnamed-chunk-12-1.png" width="504" /&gt;
+
+
+
+]
+
+.panel[.panel-name[Heures d'étude]
+&lt;img src="index_files/figure-html/unnamed-chunk-13-1.png" width="504" /&gt;
+
+
+]
+.panel[.panel-name[moment étude]
+&lt;img src="index_files/figure-html/unnamed-chunk-14-1.png" width="504" /&gt;&lt;img src="index_files/figure-html/unnamed-chunk-14-2.png" width="504" /&gt;
+
+Les enfants étudient surtout le **Soir** (*86%*) avec une majorité (*62%*) qui étudie **Moins d'une heure**.
+
+]
+]
+
+---
+### Eclairage dans les activités quotidiennes
+
+.panelset[
+
+.panel[.panel-name[éclairage pour les études]
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; satisfaction par rapport à l'éclairage pour l'étude &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; n &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Non &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 88% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Oui &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 12% &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+La majorité des ménages enquêtés (*88%*) se déclarent **non satisfaits** de leur éclairage pour étudier.
+
+]
+
+.panel[.panel-name[éclairage dans la vie quotidienne]
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; satisfaction pour les activités quotidiennes &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; n &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Non &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 92% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Oui &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8% &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+La majorité des ménages enquêtés (*92%*) se déclarent **non satisfaits** de leur éclairage pour étudier.
+]
+]
+
+---
+
+### AGR des femmes
+
+.panelset[
+
+.panel[.panel-name[participation des femmes aux AGR]
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; participation des femmes aux AGR &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; n &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Oui &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 62% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Non &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 38% &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+La majorité des femmes (*62%*)  **ne participent pas** aux revenus du ménage.
+
+]
+
+.panel[.panel-name[activité des femmes]
+&lt;img src="index_files/figure-html/unnamed-chunk-18-1.png" width="504" /&gt;
+
+L'activité qui pourrait générer un revenu et qui susceptible d'être le plus pratiqué par les femmes est la **Cuisine**.
+
+]
+]
+
+---
+### Situation de la santé
+
+.panelset[
+
+.panel[.panel-name[Fumée noire]
+&lt;img src="index_files/figure-html/unnamed-chunk-19-1.png" width="504" /&gt;
+
+**80%** des interviewés déclarent que l'éclairage qu'ils utilisent fait ressortir de la fumée noire.
+Il y a eu des cas d'incendie causé par l'utilisation de l'éclairage parmi les interviewés.
+
+]
+.panel[.panel-name[problèmes de santé]
+&lt;img src="index_files/figure-html/unnamed-chunk-20-1.png" width="504" /&gt;
+
+Le problème de santé le prévalent selon les interviewés est le **Grippe/Rhume**(32.26%). 
+
+
+Voici les autres maladies citées par les interviewés : vavony.
+
+]
+]
+
+---
+### Emancipation des femmes
+
+.panelset[
+
+.panel[.panel-name[Femmes disposant d'un compte bancaire]
+&lt;img src="index_files/figure-html/unnamed-chunk-21-1.png" width="504" /&gt;
+
+**100%** des enquêtés déclarent que les femmes ne disposent pas de compte bancaire.
+
+]
+.panel[.panel-name[sécurité la nuit]
+&lt;img src="index_files/figure-html/unnamed-chunk-22-1.png" width="504" /&gt;
+
+**52%** des enquêtés déclarent que les femmes ne se sentent pas en sécurité la nuit.
+
+]
+
+.panel[.panel-name[participation dans les associations]
+&lt;img src="index_files/figure-html/unnamed-chunk-23-1.png" width="504" /&gt;
+
+
+]
+
+.panel[.panel-name[décision dans le ménage]
+&lt;img src="index_files/figure-html/unnamed-chunk-24-1.png" width="504" /&gt;
+
+Dans le ménage, la prise de décision se fait par **Le mari(98%)**.
+
+]
+
+
+]
+
+---
+### Utilisation des téléphones
+
+.panelset[
+
+.panel[.panel-name[Utilisation des téléphones]
+&lt;img src="index_files/figure-html/unnamed-chunk-25-1.png" width="504" /&gt;
+
+**80%** des ménages interviewés possèdent au moins un téléphone.
+
+]
+.panel[.panel-name[Charge du téléphone]
+&lt;img src="index_files/figure-html/unnamed-chunk-26-1.png" width="504" /&gt;
+
+Le coût moyen payé par les ménages pour recharger le téléphone est de 500 Ariary.
+
+]
+
+.panel[.panel-name[Utilisation de radio]
+
+
+
+]
+]
+
+
+---
+class: center, middle
+
+# Description de l'échantillon
+
+---
+### description de l'échantillon
+
+&lt;img src="index_files/figure-html/unnamed-chunk-28-1.png" width="504" /&gt;
+
+
+---
+class: center, middle
+
+# Résultats du focus group
+
+---
+
+### Résultats principaux
+
+.panelset[
+
+.panel[.panel-name[infrastructures]
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; infrastructure présente &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Autre infrastructure &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; EPP ou école élémentaire &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Artisanat ou micro entreprise &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+]
+.panel[.panel-name[Groupes existant dans le village]
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; groupes existants dans le village &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Groupe ou association de développement personnel &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Groupe ou association religieuse &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+]
+
+.panel[.panel-name[Source d'eau]
+
+
+
+]
+
+.panel[.panel-name[livelihood]
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; activités économiques principales &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Pêche &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+]
+]
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightLanguage": ["r", "latex", "yaml", "markdown", "javascript", "html"],
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
