@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Visualisation / crabe
 
-```{r echo=FALSE}
+```{r message=FALSE, echo=FALSE, warning=FALSE}
 # 
 library(tidyverse)
 library(readxl)
@@ -21,7 +21,7 @@ library(lubridate)
 
 ```
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 # chargement des données 
 data <- read_xlsx(here::here("data", "Crabe", "Db_Crabe 2020.xlsx"), trim_ws = TRUE)
 
