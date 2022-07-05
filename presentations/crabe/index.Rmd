@@ -1,0 +1,69 @@
+---
+title: "analyse crabe"
+author: "Thierry"
+date: '2022-07-05'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Visualisation / crabe
+
+```{r echo=FALSE}
+# 
+library(tidyverse)
+library(readxl)
+library(echarts4r)
+library(lubridate)
+
+
+```
+
+```{r}
+# chargement des données 
+data <- read_xlsx(here::here("data", "Crabe", "Db_Crabe 2020.xlsx"), trim_ws = TRUE)
+
+# Substitution des mois
+mois <- tibble(Mois = c("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"), english = month.abb)
+
+
+# Manipulation des données
+crabe <- data %>%
+  left_join(mois) %>%
+  mutate(Mois = english) %>% 
+  mutate(Mois = paste("01", Mois, 2021, sep = "-")) %>% 
+  mutate(date = dmy(Mois)) %>%
+  select(-english, -Mois) %>% 
+  mutate(mois = month(date, label = TRUE)) %>% 
+  mutate(CPUE = str_replace(CPUE, ",", ".")) %>% 
+  mutate(CPUE = as.numeric(CPUE)) 
+
+# %>% 
+#   mutate(CPUE = ifelse(is.na(CPUE), 0, CPUE))
+
+# Visualisation 1
+crabe %>% 
+  group_by(Village) %>% 
+  e_charts(x = date) %>% 
+  e_line(serie = CPUE) %>% 
+  e_tooltip(trigger = "axis") %>% 
+  e_title(text = "",
+          subtext = "source : WWF Madagascar") %>% 
+  e_x_axis(date, axisPointer = list(show = TRUE)) %>% 
+  e_axis_labels(x = "Mois", y = "") %>%
+  e_grid(right = '15%') %>%  
+  e_legend(orient = 'vertical', 
+           right = '5', top = '15%',
+           selector = TRUE)
+
+# Visilaisation 2
+theme_set(theme_light())
+
+crabe %>% 
+  ggplot(aes(x = date, y = CPUE, colour = Village)) +
+  geom_line()
+
+```
+
