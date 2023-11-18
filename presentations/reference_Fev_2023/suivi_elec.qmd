@@ -1,0 +1,43 @@
+---
+title: "Suivi électricité"
+format: revealjs
+editor: visual
+---
+
+## type de d'éclairage utilisés par les ménages
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+
+# chargement des packages
+library(tidyverse)
+library(readxl)
+library(here)
+library(janitor)
+
+data <- read_xlsx(path = here("data", "Base de données.xlsx"),sheet = 6) %>% clean_names()
+
+theme_set(theme_light())
+
+data %>% 
+  select(cout_du_carburant_par_mois_pour_leclairage) %>% 
+  ggplot(aes(x = cout_du_carburant_par_mois_pour_leclairage)) +
+  geom_boxplot()
+
+data %>% 
+  select(cout_du_carburant_par_mois_pour_leclairage) %>% 
+  summary()
+
+data %>% 
+  filter(type_enquete == "baseline") %>% 
+  count(source)
+
+data %>% 
+  filter(type_enquete == "baseline") %>%  
+  ggplot(aes(x = source)) +
+  geom_bar() +
+  coord_flip()
+
+
+```
